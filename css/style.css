@@ -16,9 +16,10 @@
   --accent-hover:#4528E0;
   --accent-ink:#FFFFFF;
   --warn:#A8500A;
-  --footer-bg:#0E0E12;
-  --footer-ink:#B9B9C6;
-  --footer-accent:#8B6CFF;
+  --footer-bg:#FFFFFF;
+  --footer-ink:#4A4A55;
+  --footer-accent:#5B3DF5;
+  --footer-brand:#0E0E12;
   --header-bg:rgba(246,246,248,.97);
   --header-bg-blur:rgba(246,246,248,.86);
 
@@ -46,6 +47,7 @@
   --footer-bg:#08080B;
   --footer-ink:#B9B9C6;
   --footer-accent:#8B6CFF;
+  --footer-brand:#F4F4F6;
   --header-bg:rgba(14,14,18,.97);
   --header-bg-blur:rgba(14,14,18,.86);
   color-scheme:dark;
@@ -160,7 +162,7 @@ a{color:var(--ink);text-underline-offset:3px}
   .btn:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--accent-ink)}
   .btn-outline:hover{background:transparent;border-color:var(--accent);color:var(--accent)}
   .card-link:hover{border-color:var(--accent)}
-  .site-footer a:hover{color:#FFFFFF}
+  .site-footer a:hover{color:var(--accent)}
 }
 
 /* ---------- Bereiche ---------- */
@@ -178,8 +180,8 @@ main > section{
 main > section > .wrap{width:100%}
 
 /* Einrasten: ein Wisch/Scroll springt direkt in den nächsten Bereich (nur Startseite) */
-html.snap{scroll-snap-type:y mandatory}
-.snap main > section{scroll-snap-align:start;scroll-snap-stop:always}
+html.snap:not(.js){scroll-snap-type:y mandatory}
+.snap:not(.js) main > section{scroll-snap-align:start;scroll-snap-stop:always}
 /* Kontakt + Fußzeile füllen zusammen genau einen Bildschirm (Fußzeilenhöhe misst js/site.js) */
 :root{--footer-h:124px}
 main > section#kontakt{
@@ -205,8 +207,9 @@ html,body{overflow-x:hidden}
 
 /* ---------- Zurück-Pfeil auf Unterseiten (bleibt unter der Kopfzeile sichtbar) ---------- */
 .back-bar{
-  position:-webkit-sticky;position:sticky;top:var(--header-h);z-index:9;
-  padding-top:16px;padding-bottom:8px;pointer-events:none;
+  position:fixed;z-index:9;left:0;right:0;
+  top:calc(var(--header-h) + env(safe-area-inset-top) + 14px);
+  pointer-events:none;
 }
 .back-link{
   pointer-events:auto;
@@ -222,7 +225,7 @@ html,body{overflow-x:hidden}
   .back-link:hover{background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
 }
 
-/* Mausrad-Steuerung (Desktop): JavaScript übernimmt den weichen Wechsel, CSS-Einrasten aus */
+/* Bereichs-Steuerung (Mausrad, Wischen, Tasten): JavaScript übernimmt den weichen Wechsel */
 html.wheel-nav{scroll-snap-type:none;scroll-behavior:auto}
 .eyebrow{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;margin:0 0 16px}
 h1{font-size:48px;font-size:clamp(34px,6vw,64px);letter-spacing:-.01em}
@@ -293,16 +296,26 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .legal p,.legal li{color:var(--sub)}
 .placeholder{color:var(--warn);font-weight:600}
 
-/* ---------- Fußzeile (immer dunkel) ---------- */
-.site-footer{background:var(--footer-bg);color:var(--footer-ink);padding:40px 0;padding-bottom:max(40px, env(safe-area-inset-bottom));font-size:15px}
+/* ---------- Fußzeile (passt sich Hell/Dunkel an) ---------- */
+.site-footer{background:var(--footer-bg);border-top:1px solid var(--line);color:var(--footer-ink);padding:40px 0;padding-bottom:max(40px, env(safe-area-inset-bottom));font-size:15px}
 .site-footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
 .foot-brand{display:flex;align-items:center;gap:12px}
 .foot-brand .bar{width:3px;height:26px;background:var(--footer-accent)}
-.foot-brand .ck{color:#F4F4F6;font-weight:700;font-size:20px}
+.foot-brand .ck{color:var(--footer-brand);font-weight:700;font-size:20px}
 .foot-brand .sub{letter-spacing:.3em;font-size:12px}
 .site-footer nav{display:flex;gap:20px;flex-wrap:wrap}
 .site-footer a{color:var(--footer-ink);min-height:44px;display:inline-flex;align-items:center}
 .site-footer a:focus-visible{outline-color:var(--footer-accent)}
+
+
+/* ---------- Leistungen anklickbar ---------- */
+.more{display:inline-flex;align-items:center;gap:8px;margin-top:20px;min-height:44px;color:var(--accent);font-weight:600;text-decoration:none}
+.more svg{width:20px;height:20px;transition:transform .2s ease}
+@media (hover:hover) and (pointer:fine){.more:hover svg{transform:translateX(4px)}}
+
+/* ---------- Ablauf-/Beispiel-Karten ---------- */
+.card .num{display:block;color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;margin-bottom:12px}
+.card .more{margin-top:12px}
 
 /* =================================================================
    Responsive Breakpoints
@@ -362,6 +375,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 
 @media (max-height:500px) and (orientation:landscape){
   .site-header{position:relative}
+  .fx main > section:not(.is-visible) > .wrap{transform:translateY(20px)}
   .hero{padding:40px 0}
   .hero .ck{font-size:96px}
   .shot{max-width:180px}

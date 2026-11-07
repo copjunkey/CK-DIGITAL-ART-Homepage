@@ -5,6 +5,8 @@ Homepage von CK - DIGITAL ART (Inhaber Christian Kohl). Schlichtes HTML/CSS, ohn
 ## Seiten
 - `index.html` – Start, Leistungen, Apps, Fotografie, Kontakt
 - `app1.html` – App-Seite (Platzhalter)
+- `app2.html` – App-Seite (Platzhalter)
+- `leistung-apps.html`, `leistung-web-foto.html` – Leistungsseiten (Platzhalter)
 - `galerie.html` – Fotografie (Bilder unter `bilder/galerie/` ablegen)
 - `impressum.html`, `datenschutz.html` – Rechtliches (Platzhalter in eckigen Klammern ausfüllen)
 - `css/style.css` – gemeinsames Aussehen (Farben oben unter `:root`)

@@ -128,32 +128,39 @@
     for (var j = 0; j < sections.length; j++) io.observe(sections[j]);
   })();
 
-  /* ---------- Mausrad: weicher Wechsel direkt in den nächsten Bereich ----------
-     Nur auf der Startseite (html.snap), nur mit Maus/Trackpad am Desktop.
-     Am Handy übernimmt das CSS-Einrasten. Ist ein Bereich höher als der Bildschirm,
-     wird zuerst normal darin gescrollt. */
+  /* ---------- Bereichs-Steuerung: Mausrad, Wischen und Tasten einheitlich ----------
+     Auf allen Seiten (html.snap): eine Bewegung = weicher Wechsel in den nächsten Bereich.
+     Ist ein Bereich höher als der Bildschirm, wird zuerst normal darin gescrollt.
+     Auf Unterseiten: Wisch mit dem Finger von links nach rechts = Zurück-Pfeil.
+     Bei „Weniger Bewegung“ bleibt normales Scrollen. */
   (function () {
     if (!root.classList.contains('snap') || !window.matchMedia) return;
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var sections = Array.prototype.slice.call(document.querySelectorAll('main > section'));
     var header = document.querySelector('.site-header');
+    var menuBtn = document.querySelector('.menu-toggle');
     if (!sections.length) return;
     root.classList.add('wheel-nav');
 
-    var busy = false, lockUntil = 0, DURATION = 950;
+    var busy = false, lockUntil = 0, DURATION = 900;
 
-    function headerH() { return header ? header.offsetHeight : 0; }
+    function headerH() {
+      if (!header) return 0;
+      var pos = window.getComputedStyle(header).position;
+      return (pos === 'sticky' || pos === '-webkit-sticky' || pos === 'fixed') ? header.offsetHeight : 0;
+    }
     function maxScroll() { return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
     function topOf(el) { return Math.round(el.getBoundingClientRect().top + window.pageYOffset - headerH()); }
     function stops() {
       var list = sections.map(topOf);
-      var end = maxScroll(); // Seitenende – nur als eigener Halt, wenn deutlich unter dem letzten Bereich
+      if (list[0] < 40) list[0] = 0; // erster Bereich = ganz oben
+      var end = maxScroll();
       if (end - list[list.length - 1] > 40) list.push(end);
       else list[list.length - 1] = Math.min(list[list.length - 1], end);
       return list;
     }
     function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function menuOpen() { return menuBtn && menuBtn.getAttribute('aria-expanded') === 'true'; }
 
     function animateTo(y) {
       var start = window.pageYOffset, diff = y - start, t0 = null;
@@ -164,37 +171,115 @@
         var p = Math.min(1, (ts - t0) / DURATION);
         window.scrollTo(0, start + diff * ease(p));
         if (p < 1) requestAnimationFrame(step);
-        else { busy = false; lockUntil = Date.now() + 350; }
+        else { busy = false; lockUntil = Date.now() + 300; }
       }
       requestAnimationFrame(step);
     }
 
-    window.addEventListener('wheel', function (e) {
-      if (e.ctrlKey) return; // Zoomen nicht stören
-      var dir = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0;
-      if (!dir) return;
-      if (busy || Date.now() < lockUntil) { e.preventDefault(); return; }
-
-      var y = window.pageYOffset, vh = window.innerHeight, list = stops();
-      // Aktuellen Bereich bestimmen (letzter Haltepunkt oberhalb der Mitte)
+    // Liefert das Ziel für eine Richtung – oder null, wenn normal gescrollt werden soll
+    function targetFor(dir) {
+      var y = window.pageYOffset, vh = window.innerHeight, list = stops(), hh = headerH();
       var idx = 0;
       for (var i = 0; i < list.length; i++) if (list[i] <= y + 4) idx = i;
-
-      // Hoher Bereich: erst normal darin weiterscrollen
       var sec = sections[idx];
       if (sec) {
         var r = sec.getBoundingClientRect();
-        if (dir > 0 && r.bottom > vh + 4) return;
-        if (dir < 0 && r.top < headerH() - 4) return;
+        if (dir > 0 && r.bottom > vh + 4) return null;   // hoher Bereich: erst darin weiter
+        if (dir < 0 && r.top < hh - 4) return null;      // hoher Bereich: erst nach oben darin
       }
-
       var next = Math.max(0, Math.min(list.length - 1, idx + dir));
-      if (dir < 0 && list[idx] < y - 4) next = idx; // zurück an den Anfang des aktuellen Bereichs
+      if (dir < 0 && list[idx] < y - 4) next = idx;
       var target = Math.min(list[next], maxScroll());
-      if (Math.abs(target - y) < 2) return;
+      return Math.abs(target - y) < 2 ? null : target;
+    }
+
+    /* Mausrad / Trackpad */
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || menuOpen()) return;
+      var dir = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0;
+      if (!dir) return;
+      if (busy || Date.now() < lockUntil) { e.preventDefault(); return; }
+      var t = targetFor(dir);
+      if (t === null) return;
       e.preventDefault();
-      animateTo(target);
+      animateTo(t);
     }, { passive: false });
+
+    /* Tasten: Pfeil, Bild auf/ab, Leertaste, Pos1/Ende */
+    document.addEventListener('keydown', function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey || menuOpen()) return;
+      var tag = (e.target && e.target.tagName) || '';
+      if (/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(tag) || (e.target && e.target.isContentEditable)) return;
+      var dir = 0, k = e.key;
+      if (k === 'ArrowDown' || k === 'PageDown' || (k === ' ' && !e.shiftKey)) dir = 1;
+      else if (k === 'ArrowUp' || k === 'PageUp' || (k === ' ' && e.shiftKey)) dir = -1;
+      else if (k === 'Home') { e.preventDefault(); animateTo(0); return; }
+      else if (k === 'End') { e.preventDefault(); animateTo(maxScroll()); return; }
+      if (!dir) return;
+      if (busy) { e.preventDefault(); return; }
+      var t = targetFor(dir);
+      if (t === null) return;
+      e.preventDefault();
+      animateTo(t);
+    });
+
+    /* Wischen (Handy / Tablet) */
+    var tx = 0, ty = 0, tt = 0, mode = '', dirY = 0;
+    var backLink = document.querySelector('.back-link');
+
+    window.addEventListener('touchstart', function (e) {
+      if (e.touches.length !== 1) { mode = 'ignore'; return; }
+      tx = e.touches[0].clientX; ty = e.touches[0].clientY; tt = Date.now();
+      mode = ''; dirY = 0;
+      if (menuOpen()) mode = 'ignore';
+      // Rand-Geste des Browsers (iPhone „Zurück“ vom linken Rand) nicht stören
+      else if (tx < 24) mode = 'edge';
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+      if (mode === 'ignore' || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - tx, dy = ty - e.touches[0].clientY;
+      if (!mode || mode === 'edge') {
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+        if (Math.abs(dx) > Math.abs(dy) * 1.4) { mode = mode === 'edge' ? 'ignore' : 'horizontal'; return; }
+        if (mode === 'edge') mode = '';
+        dirY = dy > 0 ? 1 : -1;
+        mode = (busy || targetFor(dirY) !== null) ? 'section' : 'native';
+      }
+      if (mode === 'section' && e.cancelable) e.preventDefault(); // Seite nicht selbst scrollen lassen
+    }, { passive: false });
+
+    window.addEventListener('touchend', function (e) {
+      var ch = e.changedTouches && e.changedTouches[0];
+      if (!ch) return;
+      var dx = ch.clientX - tx, dy = ty - ch.clientY, dt = Math.max(1, Date.now() - tt);
+      if (mode === 'section') {
+        if (busy || Date.now() < lockUntil) return;
+        var fast = Math.abs(dy) / dt > 0.3;
+        if (Math.abs(dy) > 40 || (fast && Math.abs(dy) > 15)) {
+          var t = targetFor(dirY);
+          if (t !== null) animateTo(t);
+        }
+      } else if (mode === 'horizontal' && backLink) {
+        // Nur Finger von links nach rechts (wie der Zurück-Pfeil), deutlich und überwiegend waagerecht
+        if (dx > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) backLink.click();
+      }
+      mode = '';
+    }, { passive: true });
+
+    // Wurde während eines Wechsels gedreht/die Größe geändert: auf nächsten Halt ausrichten
+    var rt = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () {
+        if (busy) return;
+        var y = window.pageYOffset, list = stops(), best = list[0];
+        for (var i = 0; i < list.length; i++) if (Math.abs(list[i] - y) < Math.abs(best - y)) best = list[i];
+        var sec = null;
+        for (var j = 0; j < sections.length; j++) if (Math.abs(topOf(sections[j]) - best) < 2) sec = sections[j];
+        if (sec && sec.offsetHeight <= window.innerHeight + 4 && Math.abs(best - y) < window.innerHeight * 0.5) window.scrollTo(0, best);
+      }, 250);
+    });
   })();
 
   /* ---------- Aktiver Bereich im Menü ----------
