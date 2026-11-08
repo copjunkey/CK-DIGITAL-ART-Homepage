@@ -73,7 +73,7 @@ html{
   -webkit-text-size-adjust:100%;
   -moz-text-size-adjust:100%;
   text-size-adjust:100%;
-  scroll-padding-top:calc(var(--header-h) + 12px);
+  scroll-padding-top:var(--header-h);
 }
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{
