@@ -207,10 +207,14 @@ html,body{overflow-x:hidden}
 
 /* ---------- Zurück-Pfeil auf Unterseiten (bleibt unter der Kopfzeile sichtbar) ---------- */
 .back-bar{
-  position:fixed;z-index:9;left:0;right:0;
-  top:calc(var(--header-h) + env(safe-area-inset-top) + 14px);
+  position:fixed;z-index:9;top:auto;left:auto;
+  right:max(16px, env(safe-area-inset-right));
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  width:auto;max-width:none;margin:0;padding:0;
   pointer-events:none;
 }
+/* Platz unten, damit der Button die Fußzeilen-Links nicht verdeckt */
+body:has(.back-bar) .site-footer{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
 .back-link{
   pointer-events:auto;
   display:inline-flex;align-items:center;gap:10px;
@@ -218,11 +222,13 @@ html,body{overflow-x:hidden}
   background:var(--bg-2);color:var(--accent);border:2px solid var(--accent);
   font-weight:600;text-decoration:none;
   box-shadow:0 4px 18px rgba(0,0,0,.12);
-  transition:background-color .2s ease,color .2s ease,transform .2s ease;
+  opacity:.65;
+  transition:background-color .2s ease,color .2s ease,transform .2s ease,opacity .2s ease;
 }
+.back-link:focus-visible,.back-link:active{opacity:1}
 .back-link svg{width:24px;height:24px;flex-shrink:0}
 @media (hover:hover) and (pointer:fine){
-  .back-link:hover{background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
+  .back-link:hover{opacity:1;background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
 }
 
 /* Bereichs-Steuerung (Mausrad, Wischen, Tasten): JavaScript übernimmt den weichen Wechsel */
