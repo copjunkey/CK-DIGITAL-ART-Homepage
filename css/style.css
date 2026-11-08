@@ -275,16 +275,8 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .hero .sub{font-size:24px;font-size:clamp(14px,2.2vw,24px);letter-spacing:.45em;padding-left:.45em;color:var(--sub);text-transform:uppercase}
 .hero .lead{margin:24px auto 0}
 
-/* ---------- 3D-Backdrop im Startbereich ----------
-   Ein Lichtschein hinter dem Logo. */
+/* ---------- Startbereich ---------- */
 .hero{position:relative;overflow:hidden;isolation:isolate}
-.hero::after{
-  content:"";position:absolute;z-index:-1;pointer-events:none;
-  left:50%;top:44%;width:min(70vw,620px);height:min(70vw,620px);
-  transform:translate(-50%,-50%);
-  background:radial-gradient(closest-side, rgba(var(--ext),.28), rgba(var(--ext),.08) 55%, transparent);
-  filter:blur(8px);
-}
 /* „DIGITAL ART“ räumlich */
 .hero .sub{
   color:var(--ink);
