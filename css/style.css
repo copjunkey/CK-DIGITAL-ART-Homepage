@@ -27,6 +27,8 @@
   --glow-1:rgba(91,61,245,.13);
   --glow-2:rgba(139,108,255,.10);
   --glow-3:rgba(64,140,255,.07);
+  --grid:rgba(91,61,245,.22);
+  --ext:91,61,245;
 
   --radius:4px;
   --max:1040px;
@@ -60,6 +62,8 @@
   --glow-1:rgba(139,108,255,.20);
   --glow-2:rgba(91,61,245,.14);
   --glow-3:rgba(64,140,255,.08);
+  --grid:rgba(139,108,255,.26);
+  --ext:139,108,255;
   color-scheme:dark;
 }
 
@@ -270,6 +274,49 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .hero .line{width:140px;height:6px;background:var(--accent)}
 .hero .sub{font-size:24px;font-size:clamp(14px,2.2vw,24px);letter-spacing:.45em;padding-left:.45em;color:var(--sub);text-transform:uppercase}
 .hero .lead{margin:24px auto 0}
+
+/* ---------- 3D-Backdrop im Startbereich ----------
+   Perspektivisches Gitter als „Boden“, ein Lichtschein hinter dem Logo
+   und ein räumlich herausgeschobenes „CK“. */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero::before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  left:-50%;right:-50%;bottom:-6%;height:62%;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:64px 64px;
+  transform:perspective(520px) rotateX(64deg);
+  transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top, #000 15%, transparent 80%);
+          mask-image:linear-gradient(to top, #000 15%, transparent 80%);
+  animation:ck-grid 7s linear infinite;
+}
+.hero::after{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  left:50%;top:44%;width:min(70vw,620px);height:min(70vw,620px);
+  transform:translate(-50%,-50%);
+  background:radial-gradient(closest-side, rgba(var(--ext),.28), rgba(var(--ext),.08) 55%, transparent);
+  filter:blur(8px);
+}
+@keyframes ck-grid{to{background-position:0 64px, 0 0}}
+.hero .ck{
+  text-shadow:
+    1px 1px 0 rgba(var(--ext),.95),
+    2px 2px 0 rgba(var(--ext),.85),
+    3px 3px 0 rgba(var(--ext),.75),
+    4px 4px 0 rgba(var(--ext),.65),
+    5px 5px 0 rgba(var(--ext),.55),
+    6px 6px 0 rgba(var(--ext),.45),
+    7px 7px 0 rgba(var(--ext),.35),
+    8px 8px 0 rgba(var(--ext),.25),
+    14px 18px 28px rgba(var(--ext),.35);
+}
+@media (max-width:480px){
+  .hero::before{background-size:44px 44px;height:52%}
+  .hero .ck{text-shadow:1px 1px 0 rgba(var(--ext),.9),2px 2px 0 rgba(var(--ext),.75),3px 3px 0 rgba(var(--ext),.6),4px 4px 0 rgba(var(--ext),.45),5px 5px 0 rgba(var(--ext),.3),10px 12px 20px rgba(var(--ext),.3)}
+}
+@media (forced-colors:active){.hero::before,.hero::after{display:none}.hero .ck{text-shadow:none}}
 
 /* ---------- Knöpfe ---------- */
 .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
@@ -493,6 +540,8 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   :root,[data-theme="dark"]{--bg:#fff;--bg-2:#fff;--tile:#eee;--ink:#000;--sub:#333;--line:#bbb;--footer-bg:#fff;--footer-ink:#333}
   body{background:#fff;color:#000;font-size:11pt}
   body::before{display:none}
+  .hero::before,.hero::after{display:none}
+  .hero .ck{text-shadow:none}
   .site-header{position:static;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .nav,.btns,.skip-link,.header-tools,.back-bar{display:none!important}
   main,.site-footer{animation:none!important;transform:none!important;opacity:1!important}
