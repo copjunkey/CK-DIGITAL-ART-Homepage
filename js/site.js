@@ -1,23 +1,26 @@
-/* CK - DIGITAL ART – Hell/Dunkel-Schalter und Burger-Menü.
-   Ohne JavaScript: helles Design (bzw. System-Einstellung) und Menü immer sichtbar. */
+/* CK - DIGITAL ART – Effektfarbe, Bereichs-Steuerung, Seitenwechsel und Burger-Menü.
+   Ohne JavaScript: dunkles Design in Lila und Menü immer sichtbar. */
 (function () {
   var root = document.documentElement;
 
-  /* ---------- Design über den Seitenwechsel mitnehmen ----------
+  /* ---------- Effektfarbe über den Seitenwechsel mitnehmen ----------
      In Vorschau-Fenstern und bei lokal geöffneten Dateien teilen Browser den Speicher
-     oft nicht zwischen den Seiten. Dort hängen wir das Design an den Link an
-     (z. B. galerie.html#dunkel oder index.html#apps--dunkel) und lesen es hier wieder aus. */
+     oft nicht zwischen den Seiten. Dort hängen wir die Farbe an den Link an
+     (z. B. galerie.html#mint oder index.html#apps--mint) und lesen sie hier wieder aus. */
+  var ACCENTS = /^(lila|tuerkis|orange|rot|mint|weiss)$/;
+  function saveAccent(key) {
+    try { localStorage.setItem('ck-accent', key); } catch (e) {}
+    try {
+      var rest = (window.name || '').replace(/(?:^|;)ck-accent=[a-z]+/, '');
+      window.name = (rest ? rest + ';' : '') + 'ck-accent=' + key;
+    } catch (e) {}
+  }
   var jumpId = '';
   var hashHasTarget = !!location.hash;
   (function () {
-    var m = /^#(?:(.*)--)?(hell|dunkel)$/.exec(location.hash || '');
+    var m = /^#(?:(.*)--)?(lila|tuerkis|orange|rot|mint|weiss)$/.exec(location.hash || '');
     if (!m) return;
-    var theme = m[2] === 'dunkel' ? 'dark' : 'light';
-    try { localStorage.setItem('ck-theme', theme); } catch (e) {}
-    try {
-      var rest = (window.name || '').replace(/(?:^|;)ck-theme=(dark|light)/, '');
-      window.name = (rest ? rest + ';' : '') + 'ck-theme=' + theme;
-    } catch (e) {}
+    saveAccent(m[2]);
     jumpId = m[1] || '';
     hashHasTarget = !!jumpId;
     try { history.replaceState(null, '', location.pathname + location.search + (jumpId ? '#' + jumpId : '')); } catch (e) {}
@@ -43,7 +46,7 @@
     if (!/\.html$/i.test(page)) return;
     var here = location.pathname.split('/').pop() || 'index.html';
     if (page === here) return;
-    var tag = root.getAttribute('data-theme') === 'dark' ? 'dunkel' : 'hell';
+    var tag = root.getAttribute('data-accent') || 'lila';
     a.setAttribute('href', page + '#' + (parts[1] ? parts[1] + '--' : '') + tag);
     // Link nach dem Klick wieder zurücksetzen (für Zurück-Taste / erneutes Klicken)
     setTimeout(function () { a.setAttribute('href', href); }, 0);
@@ -364,51 +367,52 @@
     update();
   })();
 
-  /* ---------- Hell / Dunkel ---------- */
-  var themeBtn = document.querySelector('.theme-toggle');
+  /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
+  (function () {
+    var toggle = document.querySelector('.accent-toggle');
+    var menu = document.getElementById('farbwahl');
+    if (!toggle || !menu) return;
+    var items = Array.prototype.slice.call(menu.querySelectorAll('button[data-accent]'));
 
-  function currentTheme() {
-    return root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-  }
-  function applyTheme(theme, save) {
-    root.setAttribute('data-theme', theme);
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0E0E12' : '#F6F6F8');
-    if (themeBtn) {
-      var toDark = theme !== 'dark';
-      themeBtn.setAttribute('aria-label', toDark ? 'Dunkles Design einschalten' : 'Helles Design einschalten');
-      themeBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    function mark(key) {
+      items.forEach(function (it) { it.setAttribute('aria-checked', it.getAttribute('data-accent') === key ? 'true' : 'false'); });
     }
-    if (save) {
-      // Dauerhaft für spätere Besuche …
-      try { localStorage.setItem('ck-theme', theme); } catch (e) {}
-      // … und zusätzlich für diesen Tab. window.name bleibt beim Seitenwechsel erhalten,
-      // auch dort, wo der Browser localStorage nicht teilt (lokale Dateien, Vorschau-Fenster).
-      try {
-        var rest = (window.name || '').replace(/(?:^|;)ck-theme=(dark|light)/, '');
-        window.name = (rest ? rest + ';' : '') + 'ck-theme=' + theme;
-      } catch (e) {}
+    function open(state) {
+      menu.hidden = !state;
+      toggle.setAttribute('aria-expanded', state ? 'true' : 'false');
+      if (state) {
+        var cur = menu.querySelector('[aria-checked="true"]') || items[0];
+        cur.focus();
+      }
     }
-  }
-  applyTheme(currentTheme(), false);
+    mark(root.getAttribute('data-accent') || 'lila');
 
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function () {
-      applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true);
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      open(menu.hidden);
     });
-  }
-
-  // System-Einstellung folgen, solange nichts selbst gewählt wurde
-  if (window.matchMedia) {
-    var sys = window.matchMedia('(prefers-color-scheme: dark)');
-    var onSys = function (ev) {
-      var saved = /(?:^|;)ck-theme=(dark|light)/.test(window.name || '') ? 'tab' : null;
-      if (!saved) { try { saved = localStorage.getItem('ck-theme'); } catch (e) {} }
-      if (!saved) applyTheme(ev.matches ? 'dark' : 'light', false);
-    };
-    if (sys.addEventListener) sys.addEventListener('change', onSys);
-    else if (sys.addListener) sys.addListener(onSys);
-  }
+    items.forEach(function (it, i) {
+      it.addEventListener('click', function () {
+        var key = it.getAttribute('data-accent');
+        if (!ACCENTS.test(key)) return;
+        root.setAttribute('data-accent', key);
+        mark(key);
+        saveAccent(key);
+        open(false);
+        toggle.focus();
+      });
+      it.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== toggle) open(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.key === 'Esc') && !menu.hidden) { open(false); toggle.focus(); }
+    });
+  })();
 
   /* ---------- Burger-Menü ---------- */
   var btn = document.querySelector('.menu-toggle');

@@ -59,13 +59,21 @@
   --header-bg-blur:rgba(14,14,18,.86);
   --band-bg:rgba(23,23,29,.55);
   --footer-bg-blur:rgba(8,8,11,.82);
-  --glow-1:rgba(139,108,255,.20);
-  --glow-2:rgba(91,61,245,.14);
+  --glow-1:rgba(var(--ext),.20);
+  --glow-2:rgba(var(--ext),.13);
   --glow-3:rgba(64,140,255,.08);
   --grid:rgba(139,108,255,.26);
   --ext:139,108,255;
   color-scheme:dark;
 }
+
+/* ---------- Effektfarben (Auswahl über die Farbkreise in der Kopfzeile) ----------
+   Die Seite läuft nur noch im dunklen Design; die Effektfarbe ist wählbar. */
+html[data-accent="tuerkis"]{--accent:#22D3EE;--accent-hover:#67E8F9;--ext:34,211,238;--footer-accent:#22D3EE}
+html[data-accent="orange"]{--accent:#FF8A3D;--accent-hover:#FFA766;--ext:255,138,61;--footer-accent:#FF8A3D}
+html[data-accent="rot"]{--accent:#FF4D5E;--accent-hover:#FF7A86;--ext:255,77,94;--footer-accent:#FF4D5E}
+html[data-accent="mint"]{--accent:#3DDC97;--accent-hover:#6EE7B7;--ext:61,220,151;--footer-accent:#3DDC97}
+html[data-accent="weiss"]{--accent:#F4F4F6;--accent-hover:#FFFFFF;--ext:244,244,246;--footer-accent:#F4F4F6}
 
 /* ---------- Reset / Browser-Angleichung ---------- */
 *,*::before,*::after{box-sizing:border-box}
@@ -165,10 +173,6 @@ body::before{
   -webkit-appearance:none;appearance:none;
 }
 .icon-btn svg{width:22px;height:22px}
-.theme-toggle .icon-sun{display:none}
-[data-theme="dark"] .theme-toggle .icon-sun{display:block}
-[data-theme="dark"] .theme-toggle .icon-moon{display:none}
-.no-js .theme-toggle{display:none}
 
 .menu-toggle{display:none}
 .burger,.burger::before,.burger::after{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .2s ease,background-color .2s ease}
@@ -189,6 +193,27 @@ body::before{
   .card-link:hover{border-color:var(--accent)}
   .site-footer a:hover{color:var(--accent)}
 }
+
+/* ---------- Farbwahl (Kreis-Knopf mit Dropdown) ---------- */
+.accent-picker{position:relative}
+.accent-toggle .dot,.accent-menu .dot{display:block;border-radius:50%;flex-shrink:0}
+.accent-toggle .dot{width:22px;height:22px;background:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--line),0 0 14px rgba(var(--ext),.55)}
+.accent-menu{
+  position:absolute;right:0;top:calc(100% + 10px);z-index:20;
+  list-style:none;margin:0;padding:8px;min-width:180px;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,.45);
+}
+.accent-menu[hidden]{display:none}
+.accent-menu button{
+  display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:0 12px;
+  background:transparent;border:0;border-radius:8px;color:var(--ink);font:inherit;font-size:15px;text-align:left;cursor:pointer;
+}
+.accent-menu .dot{width:22px;height:22px;background:var(--c)}
+.accent-menu button[aria-checked="true"]{background:rgba(var(--ext),.12)}
+.accent-menu button[aria-checked="true"] .dot{box-shadow:0 0 0 2px var(--bg-2),0 0 0 4px var(--c)}
+.accent-menu button:focus-visible{outline-offset:-2px}
+@media (hover:hover) and (pointer:fine){.accent-menu button:hover{background:var(--tile)}}
 
 /* ---------- Bereiche ---------- */
 section{padding:var(--section) 0}
@@ -421,7 +446,7 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
 .bizcard-role{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px!important}
 .bizcard-contact{display:flex;flex-direction:column;align-items:flex-end;gap:12px;color:var(--sub);font-size:15px}
 .bizcard-contact .btn{min-height:46px;padding:0 22px}
-[data-theme="dark"] .bizcard{box-shadow:0 0 90px 12px rgba(139,108,255,.38),0 0 26px rgba(139,108,255,.32),0 18px 50px rgba(0,0,0,.5)}
+[data-theme="dark"] .bizcard{box-shadow:0 0 90px 12px rgba(var(--ext),.38),0 0 26px rgba(var(--ext),.32),0 18px 50px rgba(0,0,0,.5)}
 @media (max-width:560px){
   .bizcard{aspect-ratio:auto;padding:28px 24px;border-radius:0 0 36px 0;gap:28px}
   /* Name + Inhaber links und E-Mail rechts in einer Zeile, Knopf flach darunter */
@@ -443,7 +468,7 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
   background:var(--bg-2);
   box-shadow:0 0 70px 8px rgba(91,61,245,.30),0 0 22px rgba(91,61,245,.22),0 18px 50px rgba(20,16,60,.12);
 }
-[data-theme="dark"] #apps .card{box-shadow:0 0 90px 12px rgba(139,108,255,.38),0 0 26px rgba(139,108,255,.32),0 18px 50px rgba(0,0,0,.5)}
+[data-theme="dark"] #apps .card{box-shadow:0 0 90px 12px rgba(var(--ext),.38),0 0 26px rgba(var(--ext),.32),0 18px 50px rgba(0,0,0,.5)}
 
 /* ---------- Ablauf-/Beispiel-Karten ---------- */
 .card .num{display:block;color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;margin-bottom:12px}

@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F6F6F8">
-<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0E0E12">
+<meta name="color-scheme" content="dark">
 <meta name="format-detection" content="telephone=no">
 <title>Impressum · CK - DIGITAL ART</title>
 <meta name="robots" content="noindex">
-<script>(function(d){var t=null,h=/(?:^#|--)(hell|dunkel)$/.exec(location.hash||''),m=/(?:^|;)ck-theme=(dark|light)/.exec(window.name||'');if(h)t=h[1]==='dunkel'?'dark':'light';else if(m)t=m[1];if(!t){try{t=localStorage.getItem('ck-theme')}catch(e){}}if(t!=='dark'&&t!=='light'){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'}d.setAttribute('data-theme',t);var p=location.pathname.split('/').pop()||'index.html',c=d.className.replace('no-js','js');if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){if(p!=='index.html')c+=' enter-right';else if(location.hash)c+=' enter-left'}d.className=c})(document.documentElement)</script>
-<link rel="stylesheet" href="css/style.css?v=202611082328">
-<script src="js/site.js?v=202611082328" defer></script>
+<script>(function(d){var k='lila',ok=/^(lila|tuerkis|orange|rot|mint|weiss)$/,h=/(?:^#|--)(lila|tuerkis|orange|rot|mint|weiss)$/.exec(location.hash||''),m=/(?:^|;)ck-accent=(lila|tuerkis|orange|rot|mint|weiss)/.exec(window.name||''),s=null;try{s=localStorage.getItem('ck-accent')}catch(e){}if(h)k=h[1];else if(m)k=m[1];else if(s&&ok.test(s))k=s;d.setAttribute('data-theme','dark');d.setAttribute('data-accent',k);var p=location.pathname.split('/').pop()||'index.html',c=d.className.replace('no-js','js');if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){if(p!=='index.html')c+=' enter-right';else if(location.hash)c+=' enter-left'}d.className=c})(document.documentElement)</script>
+<link rel="stylesheet" href="css/style.css?v=202611082333">
+<script src="js/site.js?v=202611082333" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
@@ -26,10 +26,17 @@
       <a href="index.html#kontakt">Kontakt</a>
     </nav>
     <div class="header-tools">
-      <button class="icon-btn theme-toggle" type="button" aria-label="Dunkles Design einschalten" aria-pressed="false">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="22.5"/><line x1="4.6" y1="4.6" x2="6" y2="6"/><line x1="18" y1="18" x2="19.4" y2="19.4"/><line x1="1.5" y1="12" x2="3.5" y2="12"/><line x1="20.5" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="19.4" x2="6" y2="18"/><line x1="18" y1="6" x2="19.4" y2="4.6"/></svg>
-      </button>
+      <div class="accent-picker">
+        <button class="icon-btn accent-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="farbwahl" aria-label="Effektfarbe wählen"><span class="dot" aria-hidden="true"></span></button>
+        <ul class="accent-menu" id="farbwahl" role="menu" aria-label="Effektfarbe" hidden>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="true" data-accent="lila"><span class="dot" style="--c:#8B6CFF" aria-hidden="true"></span>Lila</button></li>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-accent="tuerkis"><span class="dot" style="--c:#22D3EE" aria-hidden="true"></span>Türkis</button></li>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-accent="orange"><span class="dot" style="--c:#FF8A3D" aria-hidden="true"></span>Orange</button></li>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-accent="rot"><span class="dot" style="--c:#FF4D5E" aria-hidden="true"></span>Rot</button></li>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-accent="mint"><span class="dot" style="--c:#3DDC97" aria-hidden="true"></span>Mint</button></li>
+          <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-accent="weiss"><span class="dot" style="--c:#F4F4F6" aria-hidden="true"></span>Weiß</button></li>
+        </ul>
+      </div>
       <button class="icon-btn menu-toggle" type="button" aria-expanded="false" aria-controls="hauptmenue" aria-label="Menü öffnen"><span class="burger" aria-hidden="true"></span></button>
     </div>
   </div>
