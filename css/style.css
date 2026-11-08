@@ -400,7 +400,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .bizcard-logo .line{display:block;width:88px;height:6px;background:var(--accent)}
 .bizcard-logo .sub{display:block;font-size:19px;letter-spacing:.45em;padding-left:.45em;color:var(--ink);text-transform:uppercase;
   text-shadow:1px 1px 0 rgba(var(--ext),.85),2px 2px 0 rgba(var(--ext),.6),3px 3px 0 rgba(var(--ext),.35),6px 8px 12px rgba(var(--ext),.3)}
-.bizcard-tag{list-style:none;margin:0;padding:0;font-size:19px;font-weight:500;color:var(--sub);letter-spacing:.04em;text-align:right;line-height:1.55}
+.bizcard-tag{list-style:none;margin:0;padding:0;font-size:25px;font-weight:600;color:var(--sub);letter-spacing:.02em;text-align:right;line-height:1.4}
 .bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
 .bizcard-role{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px!important}
@@ -414,7 +414,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   .bizcard-logo .ck{font-size:84px}
   .bizcard-logo .line{width:52px;height:4px}
   .bizcard-logo .sub{font-size:14px;text-shadow:1px 1px 0 rgba(var(--ext),.8),2px 2px 0 rgba(var(--ext),.5),4px 6px 10px rgba(var(--ext),.3)}
-  .bizcard-tag{font-size:16px}
+  .bizcard-tag{font-size:19px}
 }
 @supports not (aspect-ratio:1/1){ .bizcard{min-height:340px} }
 
