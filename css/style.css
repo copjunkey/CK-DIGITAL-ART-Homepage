@@ -312,11 +312,30 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
     8px 8px 0 rgba(var(--ext),.25),
     14px 18px 28px rgba(var(--ext),.35);
 }
+/* Strich und „DIGITAL ART“ ebenfalls räumlich, passend zum CK */
+.hero .line{
+  box-shadow:
+    1px 1px 0 rgba(var(--ext),.75),
+    2px 2px 0 rgba(var(--ext),.6),
+    3px 3px 0 rgba(var(--ext),.45),
+    4px 4px 0 rgba(var(--ext),.3),
+    8px 10px 16px rgba(var(--ext),.35);
+}
+[data-theme="dark"] .hero .line{background:#A48BFF}
+.hero .sub{
+  color:var(--ink);
+  text-shadow:
+    1px 1px 0 rgba(var(--ext),.85),
+    2px 2px 0 rgba(var(--ext),.6),
+    3px 3px 0 rgba(var(--ext),.35),
+    6px 8px 12px rgba(var(--ext),.3);
+}
 @media (max-width:480px){
   .hero::before{background-size:44px 44px;height:52%}
   .hero .ck{text-shadow:1px 1px 0 rgba(var(--ext),.9),2px 2px 0 rgba(var(--ext),.75),3px 3px 0 rgba(var(--ext),.6),4px 4px 0 rgba(var(--ext),.45),5px 5px 0 rgba(var(--ext),.3),10px 12px 20px rgba(var(--ext),.3)}
+  .hero .sub{text-shadow:1px 1px 0 rgba(var(--ext),.8),2px 2px 0 rgba(var(--ext),.5),4px 6px 10px rgba(var(--ext),.3)}
 }
-@media (forced-colors:active){.hero::before,.hero::after{display:none}.hero .ck{text-shadow:none}}
+@media (forced-colors:active){.hero::before,.hero::after{display:none}.hero .ck,.hero .sub{text-shadow:none}.hero .line{box-shadow:none}}
 
 /* ---------- Knöpfe ---------- */
 .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
@@ -541,7 +560,8 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   body{background:#fff;color:#000;font-size:11pt}
   body::before{display:none}
   .hero::before,.hero::after{display:none}
-  .hero .ck{text-shadow:none}
+  .hero .ck,.hero .sub{text-shadow:none}
+  .hero .line{box-shadow:none}
   .site-header{position:static;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .nav,.btns,.skip-link,.header-tools,.back-bar{display:none!important}
   main,.site-footer{animation:none!important;transform:none!important;opacity:1!important}
