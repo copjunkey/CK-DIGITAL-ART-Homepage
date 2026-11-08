@@ -358,6 +358,39 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   .service:hover .more svg{transform:translateX(4px)}
 }
 
+/* ---------- Kontakt als Visitenkarte (3 eckige Ecken, unten rechts abgerundet) ---------- */
+.bizcard{
+  width:100%;max-width:580px;margin:40px auto 0;text-align:left;
+  aspect-ratio:85/55;
+  display:flex;flex-direction:column;justify-content:space-between;gap:24px;
+  padding:36px 40px;
+  background:var(--bg-2);color:var(--ink);
+  border:1px solid var(--line);
+  border-radius:0 0 48px 0;
+  box-shadow:0 18px 50px rgba(20,16,60,.14),0 2px 6px rgba(20,16,60,.06);
+  position:relative;overflow:hidden;
+}
+.bizcard::after{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--accent)}
+.bizcard p{margin:0}
+.bizcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.bizcard-logo{display:flex;align-items:center;gap:12px}
+.bizcard-logo .bar{width:4px;height:40px;background:var(--accent)}
+.bizcard-logo .ck{display:block;font-size:34px;font-weight:700;letter-spacing:.04em;line-height:1}
+.bizcard-logo .sub{display:block;font-size:11px;letter-spacing:.38em;color:var(--sub);margin-top:6px}
+.bizcard-tag{font-size:13px;color:var(--sub);letter-spacing:.04em}
+.bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
+.bizcard-role{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px!important}
+.bizcard-contact{display:flex;flex-direction:column;align-items:flex-end;gap:12px;color:var(--sub);font-size:15px}
+.bizcard-contact .btn{min-height:46px;padding:0 22px}
+[data-theme="dark"] .bizcard{box-shadow:0 18px 50px rgba(0,0,0,.45),0 0 0 1px rgba(139,108,255,.08)}
+@media (max-width:560px){
+  .bizcard{aspect-ratio:auto;padding:28px 24px 28px 30px;border-radius:0 0 36px 0;gap:28px}
+  .bizcard-contact{align-items:stretch;width:100%}
+  .bizcard-contact .btn{width:100%}
+}
+@supports not (aspect-ratio:1/1){ .bizcard{min-height:340px} }
+
 /* ---------- Ablauf-/Beispiel-Karten ---------- */
 .card .num{display:block;color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;margin-bottom:12px}
 .card .more{margin-top:12px}
