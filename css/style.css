@@ -276,8 +276,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .hero .lead{margin:24px auto 0}
 
 /* ---------- 3D-Backdrop im Startbereich ----------
-   Perspektivisches Gitter als „Boden“, ein Lichtschein hinter dem Logo
-   und ein räumlich herausgeschobenes „CK“. */
+   Perspektivisches Gitter als „Boden“ und ein Lichtschein hinter dem Logo. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
 .hero::before{
   content:"";position:absolute;z-index:-1;pointer-events:none;
@@ -300,28 +299,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   filter:blur(8px);
 }
 @keyframes ck-grid{to{background-position:0 64px, 0 0}}
-.hero .ck{
-  text-shadow:
-    1px 1px 0 rgba(var(--ext),.95),
-    2px 2px 0 rgba(var(--ext),.85),
-    3px 3px 0 rgba(var(--ext),.75),
-    4px 4px 0 rgba(var(--ext),.65),
-    5px 5px 0 rgba(var(--ext),.55),
-    6px 6px 0 rgba(var(--ext),.45),
-    7px 7px 0 rgba(var(--ext),.35),
-    8px 8px 0 rgba(var(--ext),.25),
-    14px 18px 28px rgba(var(--ext),.35);
-}
-/* Strich und „DIGITAL ART“ ebenfalls räumlich, passend zum CK */
-.hero .line{
-  box-shadow:
-    1px 1px 0 rgba(var(--ext),.75),
-    2px 2px 0 rgba(var(--ext),.6),
-    3px 3px 0 rgba(var(--ext),.45),
-    4px 4px 0 rgba(var(--ext),.3),
-    8px 10px 16px rgba(var(--ext),.35);
-}
-[data-theme="dark"] .hero .line{background:#A48BFF}
+/* „DIGITAL ART“ räumlich */
 .hero .sub{
   color:var(--ink);
   text-shadow:
@@ -332,7 +310,6 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 }
 @media (max-width:480px){
   .hero::before{background-size:44px 44px;height:52%}
-  .hero .ck{text-shadow:1px 1px 0 rgba(var(--ext),.9),2px 2px 0 rgba(var(--ext),.75),3px 3px 0 rgba(var(--ext),.6),4px 4px 0 rgba(var(--ext),.45),5px 5px 0 rgba(var(--ext),.3),10px 12px 20px rgba(var(--ext),.3)}
   .hero .sub{text-shadow:1px 1px 0 rgba(var(--ext),.8),2px 2px 0 rgba(var(--ext),.5),4px 6px 10px rgba(var(--ext),.3)}
 }
 @media (forced-colors:active){.hero::before,.hero::after{display:none}.hero .ck,.hero .sub{text-shadow:none}.hero .line{box-shadow:none}}
