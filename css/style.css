@@ -276,20 +276,8 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .hero .lead{margin:24px auto 0}
 
 /* ---------- 3D-Backdrop im Startbereich ----------
-   Perspektivisches Gitter als „Boden“ und ein Lichtschein hinter dem Logo. */
+   Ein Lichtschein hinter dem Logo. */
 .hero{position:relative;overflow:hidden;isolation:isolate}
-.hero::before{
-  content:"";position:absolute;z-index:-1;pointer-events:none;
-  left:-50%;right:-50%;bottom:-6%;height:62%;
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size:64px 64px;
-  transform:perspective(520px) rotateX(64deg);
-  transform-origin:50% 100%;
-  -webkit-mask-image:linear-gradient(to top, #000 15%, transparent 80%);
-          mask-image:linear-gradient(to top, #000 15%, transparent 80%);
-}
 .hero::after{
   content:"";position:absolute;z-index:-1;pointer-events:none;
   left:50%;top:44%;width:min(70vw,620px);height:min(70vw,620px);
@@ -307,7 +295,6 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
     6px 8px 12px rgba(var(--ext),.3);
 }
 @media (max-width:480px){
-  .hero::before{background-size:44px 44px;height:52%}
   .hero .sub{text-shadow:1px 1px 0 rgba(var(--ext),.8),2px 2px 0 rgba(var(--ext),.5),4px 6px 10px rgba(var(--ext),.3)}
 }
 @media (forced-colors:active){.hero::before,.hero::after{display:none}.hero .ck,.hero .sub{text-shadow:none}.hero .line{box-shadow:none}}
