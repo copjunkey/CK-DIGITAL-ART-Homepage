@@ -360,7 +360,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 
 /* ---------- Kontakt als Visitenkarte (3 eckige Ecken, unten rechts abgerundet) ---------- */
 .bizcard{
-  width:100%;max-width:640px;margin:40px auto 0;text-align:left;
+  width:100%;max-width:580px;margin:40px auto 0;text-align:left;
   aspect-ratio:85/55;
   display:flex;flex-direction:column;justify-content:space-between;gap:24px;
   padding:36px 40px;
@@ -374,9 +374,9 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .bizcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 /* Logo wie auf der Startseite: CK, lila Linie, DIGITAL ART – nur kleiner */
 .bizcard-logo{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
-.bizcard-logo .ck{display:block;font-size:96px;font-weight:700;letter-spacing:.03em;line-height:.82}
-.bizcard-logo .line{display:block;width:64px;height:5px;background:var(--accent)}
-.bizcard-logo .sub{display:block;font-size:15px;letter-spacing:.45em;color:var(--sub);text-transform:uppercase}
+.bizcard-logo .ck{display:block;font-size:112px;font-weight:700;letter-spacing:.03em;line-height:.82}
+.bizcard-logo .line{display:block;width:76px;height:6px;background:var(--accent)}
+.bizcard-logo .sub{display:block;font-size:17px;letter-spacing:.45em;color:var(--sub);text-transform:uppercase}
 .bizcard-tag{font-size:14px;color:var(--sub);letter-spacing:.04em;text-align:right;max-width:12em;line-height:1.5}
 .bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
