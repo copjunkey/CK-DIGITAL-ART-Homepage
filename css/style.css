@@ -171,8 +171,8 @@ section{padding:var(--section) 0}
 /* Jeder Bereich füllt mindestens die ganze Bildschirmhöhe (abzüglich Kopfzeile).
    svh = stabile Höhe auf Handys (ohne Springen der Adressleiste), vh als Rückfall. */
 main > section{
-  min-height:calc(100vh - var(--header-h));
-  min-height:calc(100svh - var(--header-h));
+  min-height:calc(100vh - var(--header-h) - var(--footer-h));
+  min-height:calc(100svh - var(--header-h) - var(--footer-h));
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -182,12 +182,9 @@ main > section > .wrap{width:100%}
 /* Einrasten: ein Wisch/Scroll springt direkt in den nächsten Bereich (nur Startseite) */
 html.snap:not(.js){scroll-snap-type:y mandatory}
 .snap:not(.js) main > section{scroll-snap-align:start;scroll-snap-stop:always}
-/* Kontakt + Fußzeile füllen zusammen genau einen Bildschirm (Fußzeilenhöhe misst js/site.js) */
-:root{--footer-h:124px}
-main > section#kontakt{
-  min-height:calc(100vh - var(--header-h) - var(--footer-h));
-  min-height:calc(100svh - var(--header-h) - var(--footer-h));
-}
+/* Fixierte Fußzeile: Höhe misst js/site.js; der Inhalt bekommt unten entsprechend Platz */
+:root{--footer-h:49px}
+body{padding-bottom:var(--footer-h)}
 
 /* Ein- und Ausblenden beim Bereichswechsel (nur mit JavaScript, siehe js/site.js) */
 .fx main > section > .wrap{transition:opacity .9s cubic-bezier(.22,.61,.36,1),transform .9s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
@@ -200,29 +197,24 @@ html,body{overflow-x:hidden}
 @keyframes ck-out-right{to{transform:translateX(45%);opacity:0}}
 @keyframes ck-in-right{from{transform:translateX(45%);opacity:0}to{transform:none;opacity:1}}
 @keyframes ck-in-left{from{transform:translateX(-45%);opacity:0}to{transform:none;opacity:1}}
-.leave-left main,.leave-left .site-footer{animation:ck-out-left .38s cubic-bezier(.55,0,.85,.35) forwards}
-.leave-right main,.leave-right .site-footer{animation:ck-out-right .38s cubic-bezier(.55,0,.85,.35) forwards}
-.enter-right main,.enter-right .site-footer{animation:ck-in-right .6s cubic-bezier(.16,.84,.32,1) both}
-.enter-left main,.enter-left .site-footer{animation:ck-in-left .6s cubic-bezier(.16,.84,.32,1) both}
+.leave-left main{animation:ck-out-left .38s cubic-bezier(.55,0,.85,.35) forwards}
+.leave-right main{animation:ck-out-right .38s cubic-bezier(.55,0,.85,.35) forwards}
+.enter-right main{animation:ck-in-right .6s cubic-bezier(.16,.84,.32,1) both}
+.enter-left main{animation:ck-in-left .6s cubic-bezier(.16,.84,.32,1) both}
 
 /* ---------- Zurück-Pfeil auf Unterseiten (bleibt unter der Kopfzeile sichtbar) ---------- */
 .back-bar{
   position:fixed;z-index:9;left:auto;
   right:max(16px, env(safe-area-inset-right));
-  /* Oben verankert statt unten: Handy-Browser blenden beim Scrollen ihre Leisten ein/aus,
-     ein unten verankerter Button würde dabei mitspringen. svh = Höhe mit sichtbaren Leisten,
-     dadurch bleibt der Button immer an exakt derselben Stelle. */
-  bottom:auto;
-  top:calc(100vh - 64px - env(safe-area-inset-bottom));
-  top:calc(100svh - 64px - env(safe-area-inset-bottom));
+  /* Immer mit festem Abstand direkt über der fixierten Fußzeile */
+  top:auto;
+  bottom:calc(var(--footer-h) + 12px);
   width:auto;max-width:none;margin:0;padding:0;
   pointer-events:none;
 }
 /* Beim Verlassen der Seite blendet der Button nur aus, er bewegt sich nicht */
 .back-bar{transition:opacity .2s ease}
 .leave-left .back-bar,.leave-right .back-bar,.swiped .back-bar{opacity:0}
-/* Platz unten, damit der Button die Fußzeilen-Links nicht verdeckt */
-body:has(.back-bar) .site-footer{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
 .back-link{
   pointer-events:auto;
   display:inline-flex;align-items:center;gap:10px;
@@ -311,13 +303,18 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .placeholder{color:var(--warn);font-weight:600}
 
 /* ---------- Fußzeile (passt sich Hell/Dunkel an) ---------- */
-.site-footer{background:var(--footer-bg);border-top:1px solid var(--line);color:var(--footer-ink);padding:40px 0;padding-bottom:max(40px, env(safe-area-inset-bottom));font-size:15px}
-.site-footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
-.foot-brand{display:flex;align-items:center;gap:12px}
-.foot-brand .bar{width:3px;height:26px;background:var(--footer-accent)}
-.foot-brand .ck{color:var(--footer-brand);font-weight:700;font-size:20px}
-.foot-brand .sub{letter-spacing:.3em;font-size:12px}
-.site-footer nav{display:flex;gap:20px;flex-wrap:wrap}
+.site-footer{
+  position:fixed;left:0;right:0;bottom:0;z-index:8;
+  background:var(--footer-bg);border-top:1px solid var(--line);color:var(--footer-ink);
+  padding:0 0 env(safe-area-inset-bottom);font-size:14px;
+}
+.site-footer .wrap{display:flex;flex-wrap:nowrap;gap:16px;justify-content:space-between;align-items:center;min-height:48px}
+.foot-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.foot-brand .bar{width:3px;height:20px;background:var(--footer-accent)}
+.foot-brand .ck{color:var(--footer-brand);font-weight:700;font-size:17px}
+.foot-brand .sub{letter-spacing:.3em;font-size:11px}
+.foot-copy{white-space:nowrap}
+.site-footer nav{display:flex;gap:16px;flex-wrap:nowrap}
 .site-footer a{color:var(--footer-ink);min-height:44px;display:inline-flex;align-items:center}
 .site-footer a:focus-visible{outline-color:var(--footer-accent)}
 
@@ -377,7 +374,10 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   .btn{width:100%}
   .gallery{grid-template-columns:repeat(2,1fr);gap:8px}
   .photos{gap:8px}
-  .site-footer .wrap{flex-direction:column;align-items:flex-start;gap:4px}
+  .site-footer .wrap{gap:10px}
+  .site-footer{font-size:13px}
+  .site-footer nav{gap:12px}
+  .foot-brand .sub{display:none}
   .shot{max-width:220px}
 }
 
@@ -415,8 +415,10 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   .site-header{position:static;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .nav,.btns,.skip-link,.header-tools,.back-bar{display:none!important}
   main,.site-footer{animation:none!important;transform:none!important;opacity:1!important}
+  .site-footer{position:static}
+  body{padding-bottom:0}
   .brand-mobile{display:inline-flex}
-  section,main > section,main > section#kontakt{padding:24px 0;min-height:0;display:block;break-inside:avoid;page-break-inside:avoid}
+  section,main > section{padding:24px 0;min-height:0;display:block;break-inside:avoid;page-break-inside:avoid}
   .fx main > section > .wrap{opacity:1!important;transform:none!important}
   a{color:#000;text-decoration:underline}
   .foot-brand .ck{color:#000}

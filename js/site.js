@@ -227,11 +227,12 @@
     /* Wischen (Handy / Tablet)
        Senkrecht: stufenloses, normales Scrollen (kein Einrasten).
        Waagerecht auf Unterseiten: Seite folgt dem Finger nach rechts;
-       ab 51 % der Bildschirmbreite schiebt sie sich weg und es geht zurück. */
+       ab ca. 35 % der Breite oder per schnellem Wisch geht es zurück. */
     var tx = 0, ty = 0, mode = '', dragX = 0;
     var backLink = document.querySelector('.back-link');
-    var movers = Array.prototype.slice.call(document.querySelectorAll('main, .site-footer'));
-    var THRESHOLD = 0.51;
+    var movers = Array.prototype.slice.call(document.querySelectorAll('main'));
+    var THRESHOLD = 0.35, MIN_FLICK = 60, FLICK_SPEED = 0.45; // Anteil der Breite, px, px pro ms
+    var samples = [];
 
     function setDrag(x, withTransition) {
       var w = window.innerWidth || 1;
@@ -249,7 +250,7 @@
     window.addEventListener('touchstart', function (e) {
       if (e.touches.length !== 1 || menuOpen() || root.classList.contains('swiped')) { mode = 'ignore'; return; }
       tx = e.touches[0].clientX; ty = e.touches[0].clientY;
-      mode = ''; dragX = 0;
+      mode = ''; dragX = 0; samples = [];
       // Rand-Geste des Browsers (iPhone „Zurück“ vom linken Rand) nicht stören
       if (tx < 24) mode = 'ignore';
     }, { passive: true });
@@ -266,6 +267,9 @@
       if (mode === 'drag') {
         if (e.cancelable) e.preventDefault(); // beim seitlichen Ziehen nicht senkrecht scrollen
         dragX = Math.max(0, dx);
+        var now = Date.now();
+        samples.push({ x: dragX, t: now });
+        while (samples.length > 2 && now - samples[0].t > 100) samples.shift();
         setDrag(dragX, false);
       }
     }, { passive: false });
@@ -274,7 +278,16 @@
       if (mode !== 'drag') { mode = ''; return; }
       mode = '';
       var w = window.innerWidth || 1;
-      if (dragX >= w * THRESHOLD) {
+      // Geschwindigkeit der letzten ~100 ms (positiv = nach rechts)
+      var v = 0;
+      if (samples.length > 1) {
+        var a = samples[0], b = samples[samples.length - 1];
+        v = (b.x - a.x) / Math.max(1, b.t - a.t);
+      }
+      var goingBack = v < -0.15;                                // zurückgezogen: abbrechen
+      var farEnough = dragX >= w * THRESHOLD;                   // langsam weit genug gezogen
+      var flick = dragX >= MIN_FLICK && v >= FLICK_SPEED;       // schneller Wisch
+      if (!goingBack && (farEnough || flick)) {
         // Weg schieben, dann zurück zur Startseite
         root.classList.add('swiped');
         setDrag(w, true);
