@@ -213,6 +213,9 @@ html,body{overflow-x:hidden}
   width:auto;max-width:none;margin:0;padding:0;
   pointer-events:none;
 }
+/* Beim Verlassen der Seite blendet der Button nur aus, er bewegt sich nicht */
+.back-bar{transition:opacity .2s ease}
+.leave-left .back-bar,.leave-right .back-bar,.swiped .back-bar{opacity:0}
 /* Platz unten, damit der Button die Fußzeilen-Links nicht verdeckt */
 body:has(.back-bar) .site-footer{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
 .back-link{
