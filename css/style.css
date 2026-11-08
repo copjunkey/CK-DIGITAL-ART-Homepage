@@ -372,10 +372,11 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 }
 .bizcard p{margin:0}
 .bizcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
-.bizcard-logo{display:flex;align-items:center;gap:12px}
-.bizcard-logo .bar{width:4px;height:40px;background:var(--accent)}
-.bizcard-logo .ck{display:block;font-size:34px;font-weight:700;letter-spacing:.04em;line-height:1}
-.bizcard-logo .sub{display:block;font-size:11px;letter-spacing:.38em;color:var(--sub);margin-top:6px}
+/* Logo wie auf der Startseite: CK, lila Linie, DIGITAL ART – nur kleiner */
+.bizcard-logo{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.bizcard-logo .ck{display:block;font-size:48px;font-weight:700;letter-spacing:.03em;line-height:.85}
+.bizcard-logo .line{display:block;width:34px;height:3px;background:var(--accent)}
+.bizcard-logo .sub{display:block;font-size:11px;letter-spacing:.45em;color:var(--sub);text-transform:uppercase}
 .bizcard-tag{font-size:13px;color:var(--sub);letter-spacing:.04em}
 .bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
@@ -472,7 +473,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   [data-theme="dark"]{--sub:#DADAE3;--line:#55556A}
 }
 @media (forced-colors:active){
-  .hero .line,.brand-mobile .bar,.foot-brand .bar{background:CanvasText;forced-color-adjust:none}
+  .hero .line,.brand-mobile .bar,.foot-brand .bar,.bizcard-logo .line{background:CanvasText;forced-color-adjust:none}
   .btn,.card,.tile,.shot{border:1px solid CanvasText}
 }
 @media print{
