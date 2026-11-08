@@ -22,6 +22,11 @@
   --footer-brand:#0E0E12;
   --header-bg:rgba(246,246,248,.97);
   --header-bg-blur:rgba(246,246,248,.86);
+  --band-bg:rgba(255,255,255,.55);
+  --footer-bg-blur:rgba(255,255,255,.82);
+  --glow-1:rgba(91,61,245,.13);
+  --glow-2:rgba(139,108,255,.10);
+  --glow-3:rgba(64,140,255,.07);
 
   --radius:4px;
   --max:1040px;
@@ -50,6 +55,11 @@
   --footer-brand:#F4F4F6;
   --header-bg:rgba(14,14,18,.97);
   --header-bg-blur:rgba(14,14,18,.86);
+  --band-bg:rgba(23,23,29,.55);
+  --footer-bg-blur:rgba(8,8,11,.82);
+  --glow-1:rgba(139,108,255,.20);
+  --glow-2:rgba(91,61,245,.14);
+  --glow-3:rgba(64,140,255,.08);
   color-scheme:dark;
 }
 
@@ -103,6 +113,17 @@ a{color:var(--ink);text-underline-offset:3px}
 }
 .center{text-align:center}
 
+/* ---------- Farbverlauf im Hintergrund ----------
+   Feste Ebene hinter allem (statt background-attachment:fixed, das am iPhone ruckelt). */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60vmax 60vmax at 0% 0%, var(--glow-1), transparent 60%),
+    radial-gradient(55vmax 55vmax at 100% 100%, var(--glow-2), transparent 60%),
+    radial-gradient(45vmax 45vmax at 100% 0%, var(--glow-3), transparent 60%),
+    var(--bg);
+  transition:background .3s ease;
+}
 /* ---------- Kopfzeile ---------- */
 .site-header{
   position:-webkit-sticky;
@@ -240,7 +261,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .lead{font-size:21px;font-size:clamp(17px,2.2vw,21px);color:var(--sub);max-width:560px}
 .center .lead{margin-left:auto;margin-right:auto}
 .muted{color:var(--sub)}
-.band{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.band{background:var(--band-bg);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 
 /* ---------- Startbereich ---------- */
 .hero{padding:140px 0 120px}
@@ -317,6 +338,9 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .site-footer nav{display:flex;gap:16px;flex-wrap:nowrap}
 .site-footer a{color:var(--footer-ink);min-height:44px;display:inline-flex;align-items:center}
 .site-footer a:focus-visible{outline-color:var(--footer-accent)}
+@supports ((-webkit-backdrop-filter:blur(8px)) or (backdrop-filter:blur(8px))){
+  .site-footer{background:var(--footer-bg-blur);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+}
 
 
 /* ---------- Leistungen anklickbar ---------- */
@@ -422,6 +446,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 @media print{
   :root,[data-theme="dark"]{--bg:#fff;--bg-2:#fff;--tile:#eee;--ink:#000;--sub:#333;--line:#bbb;--footer-bg:#fff;--footer-ink:#333}
   body{background:#fff;color:#000;font-size:11pt}
+  body::before{display:none}
   .site-header{position:static;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .nav,.btns,.skip-link,.header-tools,.back-bar{display:none!important}
   main,.site-footer{animation:none!important;transform:none!important;opacity:1!important}
