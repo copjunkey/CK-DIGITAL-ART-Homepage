@@ -360,7 +360,7 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 
 /* ---------- Kontakt als Visitenkarte (3 eckige Ecken, unten rechts abgerundet) ---------- */
 .bizcard{
-  width:100%;max-width:580px;margin:40px auto 0;text-align:left;
+  width:100%;max-width:640px;margin:40px auto 0;text-align:left;
   aspect-ratio:85/55;
   display:flex;flex-direction:column;justify-content:space-between;gap:24px;
   padding:36px 40px;
@@ -373,11 +373,11 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .bizcard p{margin:0}
 .bizcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 /* Logo wie auf der Startseite: CK, lila Linie, DIGITAL ART – nur kleiner */
-.bizcard-logo{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.bizcard-logo .ck{display:block;font-size:48px;font-weight:700;letter-spacing:.03em;line-height:.85}
-.bizcard-logo .line{display:block;width:34px;height:3px;background:var(--accent)}
-.bizcard-logo .sub{display:block;font-size:11px;letter-spacing:.45em;color:var(--sub);text-transform:uppercase}
-.bizcard-tag{font-size:13px;color:var(--sub);letter-spacing:.04em}
+.bizcard-logo{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.bizcard-logo .ck{display:block;font-size:96px;font-weight:700;letter-spacing:.03em;line-height:.82}
+.bizcard-logo .line{display:block;width:64px;height:5px;background:var(--accent)}
+.bizcard-logo .sub{display:block;font-size:15px;letter-spacing:.45em;color:var(--sub);text-transform:uppercase}
+.bizcard-tag{font-size:14px;color:var(--sub);letter-spacing:.04em;text-align:right;max-width:12em;line-height:1.5}
 .bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
 .bizcard-role{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px!important}
@@ -388,6 +388,10 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   .bizcard{aspect-ratio:auto;padding:28px 24px;border-radius:0 0 36px 0;gap:28px}
   .bizcard-contact{align-items:stretch;width:100%}
   .bizcard-contact .btn{width:100%}
+  .bizcard-logo .ck{font-size:72px}
+  .bizcard-logo .line{width:52px;height:4px}
+  .bizcard-logo .sub{font-size:13px}
+  .bizcard-tag{text-align:left;max-width:none}
 }
 @supports not (aspect-ratio:1/1){ .bizcard{min-height:340px} }
 
