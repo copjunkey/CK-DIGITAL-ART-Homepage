@@ -207,9 +207,14 @@ html,body{overflow-x:hidden}
 
 /* ---------- Zurück-Pfeil auf Unterseiten (bleibt unter der Kopfzeile sichtbar) ---------- */
 .back-bar{
-  position:fixed;z-index:9;top:auto;left:auto;
+  position:fixed;z-index:9;left:auto;
   right:max(16px, env(safe-area-inset-right));
-  bottom:calc(16px + env(safe-area-inset-bottom));
+  /* Oben verankert statt unten: Handy-Browser blenden beim Scrollen ihre Leisten ein/aus,
+     ein unten verankerter Button würde dabei mitspringen. svh = Höhe mit sichtbaren Leisten,
+     dadurch bleibt der Button immer an exakt derselben Stelle. */
+  bottom:auto;
+  top:calc(100vh - 64px - env(safe-area-inset-bottom));
+  top:calc(100svh - 64px - env(safe-area-inset-bottom));
   width:auto;max-width:none;margin:0;padding:0;
   pointer-events:none;
 }
