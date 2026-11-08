@@ -324,6 +324,16 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
 .more svg{width:20px;height:20px;transition:transform .2s ease}
 @media (hover:hover) and (pointer:fine){.more:hover svg{transform:translateX(4px)}}
 
+/* Ganze Leistungs-Kachel klickbar (der „Mehr erfahren“-Link wird über die Kachel gespannt) */
+.service{position:relative;transition:opacity .15s ease}
+.service h3{transition:color .2s ease}
+.service .more::after{content:"";position:absolute;inset:0;z-index:1}
+.service:active{opacity:.75}
+@media (hover:hover) and (pointer:fine){
+  .service:hover h3{color:var(--accent)}
+  .service:hover .more svg{transform:translateX(4px)}
+}
+
 /* ---------- Ablauf-/Beispiel-Karten ---------- */
 .card .num{display:block;color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;margin-bottom:12px}
 .card .more{margin-top:12px}
