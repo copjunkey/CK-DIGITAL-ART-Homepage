@@ -84,6 +84,7 @@
       var page = href.split('#')[0];
       if (!/\.html$/i.test(page) || page === here) return;
       e.preventDefault();
+      if (root.classList.contains('swiped')) { location.href = href; return; } // schon weggewischt
       var toStart = page === 'index.html' && here !== 'index.html';
       root.classList.remove('enter-right', 'enter-left');
       root.classList.add(toStart ? 'leave-right' : 'leave-left');
@@ -223,53 +224,80 @@
       animateTo(t);
     });
 
-    /* Wischen (Handy / Tablet) */
-    var tx = 0, ty = 0, tt = 0, mode = '', dirY = 0;
+    /* Wischen (Handy / Tablet)
+       Senkrecht: stufenloses, normales Scrollen (kein Einrasten).
+       Waagerecht auf Unterseiten: Seite folgt dem Finger nach rechts;
+       ab 51 % der Bildschirmbreite schiebt sie sich weg und es geht zurück. */
+    var tx = 0, ty = 0, mode = '', dragX = 0;
     var backLink = document.querySelector('.back-link');
+    var movers = Array.prototype.slice.call(document.querySelectorAll('main, .site-footer'));
+    var THRESHOLD = 0.51;
+
+    function setDrag(x, withTransition) {
+      var w = window.innerWidth || 1;
+      var p = Math.max(0, Math.min(1, x / w));
+      movers.forEach(function (el) {
+        el.style.transition = withTransition ? 'transform .32s cubic-bezier(.22,.61,.36,1), opacity .32s ease' : 'none';
+        el.style.transform = x ? 'translateX(' + x + 'px)' : '';
+        el.style.opacity = x ? String(1 - p * 0.7) : '';
+      });
+    }
+    function clearDrag() {
+      movers.forEach(function (el) { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; });
+    }
 
     window.addEventListener('touchstart', function (e) {
-      if (e.touches.length !== 1) { mode = 'ignore'; return; }
-      tx = e.touches[0].clientX; ty = e.touches[0].clientY; tt = Date.now();
-      mode = ''; dirY = 0;
-      if (menuOpen()) mode = 'ignore';
+      if (e.touches.length !== 1 || menuOpen() || root.classList.contains('swiped')) { mode = 'ignore'; return; }
+      tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+      mode = ''; dragX = 0;
       // Rand-Geste des Browsers (iPhone „Zurück“ vom linken Rand) nicht stören
-      else if (tx < 24) mode = 'edge';
+      if (tx < 24) mode = 'ignore';
     }, { passive: true });
 
     window.addEventListener('touchmove', function (e) {
-      if (mode === 'ignore' || e.touches.length !== 1) return;
-      var dx = e.touches[0].clientX - tx, dy = ty - e.touches[0].clientY;
-      if (!mode || mode === 'edge') {
+      if (mode === 'ignore' || mode === 'native' || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - tx, dy = e.touches[0].clientY - ty;
+      if (!mode) {
         if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
-        if (Math.abs(dx) > Math.abs(dy) * 1.4) { mode = mode === 'edge' ? 'ignore' : 'horizontal'; return; }
-        if (mode === 'edge') mode = '';
-        dirY = dy > 0 ? 1 : -1;
-        mode = (busy || targetFor(dirY) !== null) ? 'section' : 'native';
+        // Nur waagerecht nach rechts und nur auf Unterseiten mit Zurück-Pfeil
+        mode = (backLink && dx > 0 && Math.abs(dx) > Math.abs(dy) * 1.4) ? 'drag' : 'native';
+        if (mode === 'native') return;
       }
-      if (mode === 'section' && e.cancelable) e.preventDefault(); // Seite nicht selbst scrollen lassen
+      if (mode === 'drag') {
+        if (e.cancelable) e.preventDefault(); // beim seitlichen Ziehen nicht senkrecht scrollen
+        dragX = Math.max(0, dx);
+        setDrag(dragX, false);
+      }
     }, { passive: false });
 
-    window.addEventListener('touchend', function (e) {
-      var ch = e.changedTouches && e.changedTouches[0];
-      if (!ch) return;
-      var dx = ch.clientX - tx, dy = ty - ch.clientY, dt = Math.max(1, Date.now() - tt);
-      if (mode === 'section') {
-        if (busy || Date.now() < lockUntil) return;
-        var fast = Math.abs(dy) / dt > 0.3;
-        if (Math.abs(dy) > 40 || (fast && Math.abs(dy) > 15)) {
-          var t = targetFor(dirY);
-          if (t !== null) animateTo(t);
-        }
-      } else if (mode === 'horizontal' && backLink) {
-        // Nur Finger von links nach rechts (wie der Zurück-Pfeil), deutlich und überwiegend waagerecht
-        if (dx > 70 && Math.abs(dx) > Math.abs(dy) * 1.6) backLink.click();
-      }
+    function endDrag() {
+      if (mode !== 'drag') { mode = ''; return; }
       mode = '';
-    }, { passive: true });
+      var w = window.innerWidth || 1;
+      if (dragX >= w * THRESHOLD) {
+        // Weg schieben, dann zurück zur Startseite
+        root.classList.add('swiped');
+        setDrag(w, true);
+        setTimeout(function () { backLink.click(); }, 300);
+      } else {
+        // Zurück an den Platz
+        setDrag(0, true);
+        setTimeout(clearDrag, 340);
+      }
+    }
+    window.addEventListener('touchend', endDrag, { passive: true });
+    window.addEventListener('touchcancel', endDrag, { passive: true });
+
+    // Zurück-Taste des Browsers: Wisch-Zustand zurücksetzen
+    window.addEventListener('pageshow', function (ev) {
+      if (ev.persisted) { root.classList.remove('swiped'); clearDrag(); }
+    });
 
     // Wurde während eines Wechsels gedreht/die Größe geändert: auf nächsten Halt ausrichten
     var rt = null;
+    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     window.addEventListener('resize', function () {
+      if (!finePointer) return;
       clearTimeout(rt);
       rt = setTimeout(function () {
         if (busy) return;
