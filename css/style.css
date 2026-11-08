@@ -289,7 +289,6 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   transform-origin:50% 100%;
   -webkit-mask-image:linear-gradient(to top, #000 15%, transparent 80%);
           mask-image:linear-gradient(to top, #000 15%, transparent 80%);
-  animation:ck-grid 7s linear infinite;
 }
 .hero::after{
   content:"";position:absolute;z-index:-1;pointer-events:none;
@@ -298,7 +297,6 @@ h3{font-size:30px;font-size:clamp(24px,3vw,32px)}
   background:radial-gradient(closest-side, rgba(var(--ext),.28), rgba(var(--ext),.08) 55%, transparent);
   filter:blur(8px);
 }
-@keyframes ck-grid{to{background-position:0 64px, 0 0}}
 /* „DIGITAL ART“ räumlich */
 .hero .sub{
   color:var(--ink);
