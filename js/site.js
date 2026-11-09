@@ -209,6 +209,20 @@
       animateTo(t);
     }, { passive: false });
 
+    /* Sprünge innerhalb der Seite (z. B. Kreis-Navigation) weich mit Ein-/Ausblenden */
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a || a.classList.contains('skip-link')) return;
+      var id = a.getAttribute('href').slice(1);
+      var target = id && document.getElementById(id);
+      if (!target || sections.indexOf(target) === -1) return;
+      e.preventDefault();
+      if (busy) return;
+      animateTo(Math.min(topOf(target), maxScroll()));
+      try { history.replaceState(null, '', '#' + id); } catch (err) {}
+    });
+
     /* Tasten: Pfeil, Bild auf/ab, Leertaste, Pos1/Ende */
     document.addEventListener('keydown', function (e) {
       if (e.altKey || e.ctrlKey || e.metaKey || menuOpen()) return;
