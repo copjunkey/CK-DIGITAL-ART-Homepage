@@ -411,9 +411,12 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   100%{filter:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub{animation:none!important}
+  .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
 }
 
+/* Knopf-Schrift erst unsichtbar (= Knopf-Hintergrund), wird mit dem Pulsieren voll sichtbar */
+.hub .orbit{animation:ck-orbit-text 1.1s ease-in-out 4.4s backwards}
+@keyframes ck-orbit-text{from{color:var(--bg-2)}to{color:var(--ink)}}
 /* Kreis pulsiert 1×, nachdem der Schriftzug fertig ist (Aufleuchten endet bei 4,4 s) */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out 4.4s 1}
 @keyframes ck-pulse{
