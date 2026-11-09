@@ -414,18 +414,15 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
 }
 
-/* Kreis-Knöpfe: bis der Kreiseffekt gestartet ist komplett unsichtbar, dann ploppen sie
-   nacheinander auf (deckend, daher scheint der Kreis nicht durch). */
-.hub .orbit{animation:ck-orbit-pop .6s cubic-bezier(.2,.9,.3,1.3) backwards}
-.hub .orbit:nth-of-type(1){animation-delay:4.0s}
-.hub .orbit:nth-of-type(2){animation-delay:4.1s}
-.hub .orbit:nth-of-type(3){animation-delay:4.2s}
-.hub .orbit:nth-of-type(4){animation-delay:4.3s}
-@keyframes ck-orbit-pop{
-  0%  {scale:0;visibility:hidden}
-  1%  {scale:0;visibility:visible}
-  70% {scale:1.08}
-  100%{scale:1}
+/* Kreis-Knöpfe werden vom Kreiseffekt „eingeschaltet“: bis dahin unsichtbar, genau wenn
+   die Kreislinie beim Pulsieren am hellsten ist (3,8 s + 0,55 s), springen alle vier mit
+   einem kurzen Lichtblitz an – deckend, daher scheint der Kreis nicht durch. */
+.hub .orbit{animation:ck-orbit-on .8s cubic-bezier(.2,.9,.3,1.2) 4.35s backwards}
+@keyframes ck-orbit-on{
+  0%  {scale:.6;visibility:hidden}
+  1%  {scale:.6;visibility:visible;border-color:#FFFFFF;box-shadow:0 0 0 0 rgba(var(--ext),1),0 0 0 rgba(var(--ext),0)}
+  35% {scale:1.07;border-color:#FFFFFF;box-shadow:0 0 0 6px rgba(var(--ext),.35),0 0 36px rgba(var(--ext),.95)}
+  100%{scale:1;border-color:var(--accent);box-shadow:0 0 0 0 rgba(var(--ext),0),0 0 22px rgba(var(--ext),.30)}
 }
 /* Kreis pulsiert 1×, 0,1 s nach Beginn des Aufleuchtens von „DIGITAL ART“ (3,7 s + 0,1 s) */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out 3.8s 1}
