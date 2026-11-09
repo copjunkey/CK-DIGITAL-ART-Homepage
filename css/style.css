@@ -369,6 +369,24 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   border:1px solid rgba(var(--ext),.35);
   box-shadow:0 0 40px rgba(var(--ext),.12) inset,0 0 40px rgba(var(--ext),.10);
 }
+/* Sphärische Optik: Kugel mit Licht von oben links, dunklem Rand und farbigem Randlicht */
+.hub .ring::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255,255,255,.14) 0%, rgba(255,255,255,.04) 22%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(var(--ext),.10) 0%, rgba(var(--ext),.05) 45%, rgba(8,8,12,.55) 100%);
+  box-shadow:
+    inset -28px -36px 70px rgba(0,0,0,.55),
+    inset 18px 22px 50px rgba(255,255,255,.05),
+    inset 0 -12px 40px rgba(var(--ext),.28);
+}
+.hub .ring::after{
+  content:"";position:absolute;left:20%;top:12%;width:34%;height:20%;border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(255,255,255,.18), transparent 70%);
+  filter:blur(6px);transform:rotate(-28deg);
+}
+.hub .hub-logo{z-index:1}
+.hub .orbit{z-index:2}
 /* Kreis pulsiert beim Laden der Seite 3× */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out .3s 3}
 @keyframes ck-pulse{
