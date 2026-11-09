@@ -472,6 +472,8 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
 .btn[aria-disabled="true"]{cursor:default;background:transparent;color:var(--sub);border-color:var(--line)}
 
 /* ---------- Leistungen (zwei Spalten mit Trennlinie) ---------- */
+.services-title{margin-bottom:48px}
+@media (max-width:768px){.services-title{margin-bottom:24px}}
 .services{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
 .service{padding:56px 40px 0 0}
 .service + .service{padding:56px 0 0 40px;border-left:1px solid var(--line)}
