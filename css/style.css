@@ -414,18 +414,18 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
 }
 
-/* Kreis-Knöpfe erst komplett durchsichtig, blenden ab dem Pulsieren weich (aus der Unschärfe) auf 100 % ein */
+/* Kreis-Knöpfe erst komplett durchsichtig, blenden ab dem Pulsieren weich auf 100 % ein */
 .hub .orbit{animation:ck-orbit-in 1.8s cubic-bezier(.25,.1,.25,1) 3.8s backwards}
 @keyframes ck-orbit-in{
-  0%  {opacity:0;filter:blur(3px)}
-  40% {opacity:.35;filter:blur(1.5px)}
-  100%{opacity:1;filter:blur(0)}
+  0%  {opacity:0}
+  40% {opacity:.35}
+  100%{opacity:1}
 }
 /* Kreis pulsiert 1×, 0,1 s nach Beginn des Aufleuchtens von „DIGITAL ART“ (3,7 s + 0,1 s) */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out 3.8s 1}
 @keyframes ck-pulse{
   0%,100%{transform:scale(1);border-color:rgba(var(--ext),.35);box-shadow:0 0 40px rgba(var(--ext),.12) inset,0 0 40px rgba(var(--ext),.10)}
-  50%{transform:scale(1.02);border-color:rgba(var(--ext),.62);box-shadow:0 0 50px rgba(var(--ext),.21) inset,0 0 55px rgba(var(--ext),.28)}
+  50%{transform:scale(1.02);border-color:rgba(var(--ext),1);box-shadow:0 0 0 1px rgba(var(--ext),.9),0 0 0 4px rgba(var(--ext),.18),0 0 10px rgba(var(--ext),.45)}
 }
 .hub .hub-logo{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
