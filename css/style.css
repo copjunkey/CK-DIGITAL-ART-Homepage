@@ -417,7 +417,7 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
 /* Kreis-Knöpfe werden vom Kreiseffekt „eingeschaltet“: bis dahin unsichtbar, genau wenn
    die Kreislinie beim Pulsieren am hellsten ist (3,8 s + 0,55 s), springen alle vier mit
    einem kurzen Lichtblitz an – deckend, daher scheint der Kreis nicht durch. */
-.hub .orbit{animation:ck-orbit-on .8s cubic-bezier(.2,.9,.3,1.2) 4.35s backwards}
+.hub .orbit{animation:ck-orbit-on 1.2s cubic-bezier(.25,.8,.35,1) 4.35s backwards}
 /* Vergrößerung direkt am Platz des Knopfs (nicht von der Kreismitte aus) */
 @keyframes ck-orbit-on{
   0%  {transform:translate(-50%,-50%) rotate(var(--a)) translateX(calc(var(--d) / 2)) rotate(calc(var(--a) * -1)) scale(.85);visibility:hidden}
