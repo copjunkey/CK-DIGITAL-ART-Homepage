@@ -414,12 +414,14 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
 }
 
-/* Kreis-Knöpfe erst komplett durchsichtig, blenden ab dem Pulsieren weich auf 100 % ein */
+/* Kreis-Knöpfe erscheinen ab dem Pulsieren weich auf 100 % */
 .hub .orbit{animation:ck-orbit-in 1.8s cubic-bezier(.25,.1,.25,1) 3.8s backwards}
+/* Hintergrund der Knöpfe bleibt dabei immer deckend, damit der Kreis nicht durchscheint;
+   nur Schrift, Rahmen und Leuchten blenden ein. */
 @keyframes ck-orbit-in{
-  0%  {opacity:0}
-  40% {opacity:.35}
-  100%{opacity:1}
+  0%  {color:transparent;border-color:transparent;box-shadow:0 0 22px rgba(var(--ext),0)}
+  40% {color:rgba(244,244,246,.35);border-color:rgba(var(--ext),.35);box-shadow:0 0 22px rgba(var(--ext),.1)}
+  100%{color:var(--ink);border-color:var(--accent);box-shadow:0 0 22px rgba(var(--ext),.30)}
 }
 /* Kreis pulsiert 1×, 0,1 s nach Beginn des Aufleuchtens von „DIGITAL ART“ (3,7 s + 0,1 s) */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out 3.8s 1}
