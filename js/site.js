@@ -428,6 +428,61 @@
     });
   })();
 
+  /* ---------- Schnellmenü oben rechts ----------
+     Auf der Startseite erst sichtbar, wenn der Startkreis verlassen ist; auf Unterseiten immer.
+     Öffnen: Bereiche fliegen nacheinander ein. Bereich wählen: wieder zum Burger. */
+  (function () {
+    var menu = document.getElementById('schnellmenue');
+    if (!menu) return;
+    var toggle = menu.querySelector('.quick-toggle');
+    var list = menu.querySelector('.quick-nav');
+    var closeTimer = null;
+
+    function isOpen() { return toggle.getAttribute('aria-expanded') === 'true'; }
+    function openMenu() {
+      clearTimeout(closeTimer);
+      menu.classList.remove('is-closing');
+      list.hidden = false;
+      void list.offsetWidth; // Startzustand übernehmen, damit die Einflug-Animation läuft
+      menu.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Menü schließen');
+    }
+    function closeMenu() {
+      if (!isOpen()) return;
+      menu.classList.remove('is-open');
+      menu.classList.add('is-closing');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Menü öffnen');
+      closeTimer = setTimeout(function () { list.hidden = true; menu.classList.remove('is-closing'); }, 320);
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (isOpen()) closeMenu(); else openMenu();
+    });
+    list.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a')) closeMenu();
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !menu.contains(e.target)) closeMenu();
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.key === 'Esc') && isOpen()) { closeMenu(); toggle.focus({ preventScroll: true }); }
+    });
+
+    // Startseite: Burger nur außerhalb des Startkreises
+    var hero = document.getElementById('start');
+    if (hero && menu.classList.contains('is-hidden')) {
+      if (!('IntersectionObserver' in window)) { menu.classList.remove('is-hidden'); return; }
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.5;
+        menu.classList.toggle('is-hidden', visible);
+        if (visible) closeMenu();
+      }, { threshold: [0, 0.5, 1] }).observe(hero);
+    }
+  })();
+
   /* ---------- Burger-Menü ---------- */
   var btn = document.querySelector('.menu-toggle');
   var nav = document.getElementById('hauptmenue');
