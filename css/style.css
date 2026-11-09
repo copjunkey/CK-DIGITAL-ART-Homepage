@@ -59,9 +59,9 @@
   --header-bg-blur:rgba(14,14,18,.86);
   --band-bg:rgba(23,23,29,.55);
   --footer-bg-blur:rgba(8,8,11,.82);
-  --glow-1:rgba(var(--ext),.20);
-  --glow-2:rgba(var(--ext),.13);
-  --glow-3:rgba(64,140,255,.08);
+  --glow-1:rgba(var(--ext),.10);
+  --glow-2:rgba(var(--ext),.06);
+  --glow-3:rgba(64,140,255,.04);
   --grid:rgba(139,108,255,.26);
   --ext:139,108,255;
   color-scheme:dark;
