@@ -414,9 +414,9 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   .hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
 }
 
-/* Knopf-Schrift erst unsichtbar (= Knopf-Hintergrund), wird mit dem Pulsieren voll sichtbar */
-.hub .orbit{animation:ck-orbit-text 1.1s ease-in-out 3.8s backwards}
-@keyframes ck-orbit-text{from{color:var(--bg-2)}to{color:var(--ink)}}
+/* Kreis-Knöpfe erst komplett durchsichtig, blenden mit dem Pulsieren auf 100 % Deckkraft */
+.hub .orbit{animation:ck-orbit-in 1.1s ease-in-out 3.8s backwards}
+@keyframes ck-orbit-in{from{opacity:0}to{opacity:1}}
 /* Kreis pulsiert 1×, 0,1 s nach Beginn des Aufleuchtens von „DIGITAL ART“ (3,7 s + 0,1 s) */
 .hub .ring{animation:ck-pulse 1.1s ease-in-out 3.8s 1}
 @keyframes ck-pulse{
