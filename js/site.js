@@ -382,7 +382,7 @@
       toggle.setAttribute('aria-expanded', state ? 'true' : 'false');
       if (state) {
         var cur = menu.querySelector('[aria-checked="true"]') || items[0];
-        cur.focus();
+        cur.focus({ preventScroll: true });
       }
     }
     mark(root.getAttribute('data-accent') || 'lila');
@@ -399,18 +399,18 @@
         mark(key);
         saveAccent(key);
         open(false);
-        toggle.focus();
+        toggle.focus({ preventScroll: true });
       });
       it.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus({ preventScroll: true }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus({ preventScroll: true }); }
       });
     });
     document.addEventListener('click', function (e) {
       if (!menu.hidden && !menu.contains(e.target) && e.target !== toggle) open(false);
     });
     document.addEventListener('keydown', function (e) {
-      if ((e.key === 'Escape' || e.key === 'Esc') && !menu.hidden) { open(false); toggle.focus(); }
+      if ((e.key === 'Escape' || e.key === 'Esc') && !menu.hidden) { open(false); toggle.focus({ preventScroll: true }); }
     });
   })();
 
