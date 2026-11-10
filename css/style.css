@@ -416,11 +416,11 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
    der Inhalt pulsiert nur 2× leicht. Beim ersten Laden oder Aktualisieren läuft das volle Intro. */
 .intro-seen .hub .stamp,.intro-seen .hub .hub-logo .line,.intro-seen .hub .hub-logo .sub,.intro-seen .hub .hub-logo .sub .ch,
 .intro-seen .hub .orbit,.intro-seen .hub .ring,.intro-seen .hub .ring-light{animation:none}
-.intro-seen .hub{animation:ck-soft-pulse 1.2s ease-in-out .25s 2}
-.intro-seen .hub .ring{animation:ck-soft-ring 1.2s ease-in-out .25s 2}
+.intro-seen .hub{animation:ck-soft-pulse 1.2s ease-in-out .25s 1}
+.intro-seen .hub .ring{animation:ck-soft-ring 1.2s ease-in-out .25s 1}
 /* Rückkehr zum Startbereich innerhalb der Seite: ebenfalls nur 2× leicht pulsieren */
-.hub.pulse-again{animation:ck-soft-pulse 1.2s ease-in-out 0s 2}
-.hub.pulse-again .ring{animation:ck-soft-ring 1.2s ease-in-out 0s 2}
+.hub.pulse-again{animation:ck-soft-pulse 1.2s ease-in-out 0s 1}
+.hub.pulse-again .ring{animation:ck-soft-ring 1.2s ease-in-out 0s 1}
 @keyframes ck-soft-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
 @keyframes ck-soft-ring{
   0%,100%{border-color:rgba(var(--ext),.35)}
