@@ -662,6 +662,9 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
 @supports not (aspect-ratio:1/1){ .bizcard{min-height:340px} }
 @media (max-width:400px){.bizcard-mail svg{display:none}}
 
+/* Vier App-Kacheln: am PC 2×2, am Handy untereinander */
+.app-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.app-cards{grid-template-columns:1fr}}
 /* App-Kacheln mit demselben lila Backlight wie die Visitenkarte */
 #apps .card{
   background:var(--bg-2);
