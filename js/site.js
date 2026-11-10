@@ -62,6 +62,17 @@
     window.addEventListener('load', measure);
   })();
 
+  function cameFromStart() {
+    try {
+      if (!document.referrer || history.length < 2) return false;
+      var ref = document.referrer.split('#')[0].split('?')[0];
+      var dir = location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '');
+      if (ref.indexOf(dir) !== 0) return false;                 // andere Seite / anderer Ordner
+      var page = ref.slice(dir.length);
+      return page === '' || page === 'index.html';
+    } catch (e) { return false; }
+  }
+
   /* ---------- Seitenwechsel mit Animation ----------
      Zur Unterseite: aktuelle Seite zieht nach links weg, neue fliegt von rechts ein.
      Zurück zur Startseite: umgekehrt. */
@@ -87,11 +98,15 @@
       var page = href.split('#')[0];
       if (!/\.html$/i.test(page) || page === here) return;
       e.preventDefault();
-      if (root.classList.contains('swiped')) { location.href = href; return; } // schon weggewischt
+      // Zurück-Knopf (und Zurück-Wisch): kam man von der eigenen Startseite, im Browser-Verlauf
+      // zurückgehen – so passt danach auch die Zurück-Taste des Handys.
+      var goBack = a.classList.contains('back-link') && cameFromStart();
+      var leave = function () { if (goBack) history.back(); else location.href = href; };
+      if (root.classList.contains('swiped')) { leave(); return; } // schon weggewischt
       var toStart = page === 'index.html' && here !== 'index.html';
       root.classList.remove('enter-right', 'enter-left');
       root.classList.add(toStart ? 'leave-right' : 'leave-left');
-      setTimeout(function () { location.href = href; }, 360);
+      setTimeout(leave, 360);
     });
   })();
 
@@ -220,7 +235,15 @@
       e.preventDefault();
       if (busy) return;
       animateTo(Math.min(topOf(target), maxScroll()));
-      try { history.replaceState(null, '', '#' + id); } catch (err) {}
+      try { if (location.hash !== '#' + id) history.pushState({ ck: id }, '', '#' + id); } catch (err) {}
+    });
+
+    /* Zurück-Taste (Handy/Browser) innerhalb der Startseite: weich zum vorherigen Bereich */
+    window.addEventListener('popstate', function () {
+      var id = (location.hash || '').slice(1);
+      var target = id ? document.getElementById(id) : null;
+      if (id && (!target || sections.indexOf(target) === -1)) return;
+      animateTo(target ? Math.min(topOf(target), maxScroll()) : 0);
     });
 
     /* Tasten: Pfeil, Bild auf/ab, Leertaste, Pos1/Ende */
