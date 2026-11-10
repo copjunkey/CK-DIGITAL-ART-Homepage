@@ -459,7 +459,7 @@
     var instant = root.classList.contains('intro-seen') ||
       (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     if (instant) hub.classList.add('glow-off');
-    else setTimeout(function () { hub.classList.add('glow-off'); }, 6000);
+    else setTimeout(function () { hub.classList.add('glow-off'); }, 8700);   // nach dem Ausblenden (6 s + 2,6 s)
   })();
 
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
