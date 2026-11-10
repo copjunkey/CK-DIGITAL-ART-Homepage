@@ -428,7 +428,7 @@
     });
   })();
 
-  /* ---------- Hinweis, wenn der aktuelle Bereich nach unten weitergeht ---------- */
+  /* ---------- Hinweis „geht weiter nach unten“: sichtbar, bis das Seitenende erreicht ist ---------- */
   (function () {
     var secs = Array.prototype.slice.call(document.querySelectorAll('main > section'));
     if (!secs.length) return;
@@ -441,13 +441,9 @@
     var ticking = false;
     function update() {
       ticking = false;
-      var bottom = window.innerHeight - (foot ? foot.offsetHeight : 0);
-      var mid = bottom / 2, cur = null;
-      for (var i = 0; i < secs.length; i++) {
-        var r = secs[i].getBoundingClientRect();
-        if (r.top <= mid && r.bottom > mid) { cur = r; break; }
-      }
-      hint.classList.toggle('is-visible', !!cur && cur.bottom > bottom + 24);
+      // Sichtbar, solange es auf der Seite weiter nach unten geht; nur ganz unten aus
+      var more = document.documentElement.scrollHeight - (window.pageYOffset + window.innerHeight) > 24;
+      hint.classList.toggle('is-visible', more);
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     window.addEventListener('scroll', onScroll, { passive: true });
