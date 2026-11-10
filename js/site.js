@@ -428,6 +428,34 @@
     });
   })();
 
+  /* ---------- Hinweis, wenn der aktuelle Bereich nach unten weitergeht ---------- */
+  (function () {
+    var secs = Array.prototype.slice.call(document.querySelectorAll('main > section'));
+    if (!secs.length) return;
+    var hint = document.createElement('div');
+    hint.className = 'scroll-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 6 12 12 18 6"/><polyline points="6 12 12 18 18 12"/></svg>';
+    document.body.appendChild(hint);
+    var foot = document.querySelector('.site-footer');
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var bottom = window.innerHeight - (foot ? foot.offsetHeight : 0);
+      var mid = bottom / 2, cur = null;
+      for (var i = 0; i < secs.length; i++) {
+        var r = secs[i].getBoundingClientRect();
+        if (r.top <= mid && r.bottom > mid) { cur = r; break; }
+      }
+      hint.classList.toggle('is-visible', !!cur && cur.bottom > bottom + 24);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('load', update);
+    update();
+  })();
+
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
   (function () {
     var toggle = document.querySelector('.accent-toggle');
