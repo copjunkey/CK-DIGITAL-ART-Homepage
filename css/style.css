@@ -446,9 +446,11 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
    gleiches Timing wie das Aufleuchten von „DIGITAL ART“ (ab 3,7 s, ca. 1,1 s) */
 .hub .ring-light{
   position:absolute;inset:-1px;border-radius:50%;pointer-events:none;opacity:0;
-  background:conic-gradient(from 0deg,
-    rgba(var(--ext),0) 0deg, rgba(var(--ext),0) 250deg,
-    rgba(var(--ext),.55) 320deg, rgba(var(--ext),1) 352deg, #FFFFFF 358deg, rgba(var(--ext),0) 360deg);
+  /* Start/Ende bei „Fotografie“ (unten links = 225°), Licht läuft gegen den Uhrzeigersinn;
+     der Schweif liegt daher im Uhrzeigersinn hinter der hellen Spitze */
+  background:conic-gradient(from 225deg,
+    rgba(var(--ext),0) 0deg, #FFFFFF 2deg, rgba(var(--ext),1) 8deg,
+    rgba(var(--ext),.55) 40deg, rgba(var(--ext),0) 110deg, rgba(var(--ext),0) 360deg);
   -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
           mask:radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
   filter:drop-shadow(0 0 6px rgba(var(--ext),.8));
@@ -458,7 +460,7 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   0%  {transform:rotate(0deg);opacity:0}
   8%  {opacity:1}
   90% {opacity:1}
-  100%{transform:rotate(360deg);opacity:0}
+  100%{transform:rotate(-360deg);opacity:0}
 }
 @keyframes ck-pulse{
   0%,100%{transform:scale(1);border-color:rgba(var(--ext),.35);box-shadow:0 0 40px rgba(var(--ext),.12) inset,0 0 40px rgba(var(--ext),.10)}
