@@ -269,8 +269,8 @@ body::before{
   color:var(--accent);opacity:0;transition:opacity .3s ease;
 }
 .scroll-hint.is-visible{opacity:.85}
-.scroll-hint svg{display:block;width:26px;height:26px;filter:drop-shadow(0 0 6px rgba(var(--ext),.5));animation:ck-hint 1.6s ease-in-out infinite}
-@keyframes ck-hint{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(5px);opacity:1}}
+.scroll-hint svg{display:block;width:52px;height:26px;filter:drop-shadow(0 0 6px rgba(var(--ext),.5));animation:ck-hint 1.6s ease-in-out infinite}
+@keyframes ck-hint{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(2px);opacity:1}}
 @media (prefers-reduced-motion:reduce){.scroll-hint svg{animation:none}}
 @media print{.scroll-hint{display:none}}
 
