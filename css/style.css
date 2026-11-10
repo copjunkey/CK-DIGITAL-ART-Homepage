@@ -590,6 +590,17 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
 .app-head{display:grid;gap:48px;grid-template-columns:1fr;align-items:center}
 .shot{aspect-ratio:9/19;max-width:260px;justify-self:center;width:100%;border-radius:36px;border:10px solid var(--ink);background:var(--tile);display:flex;align-items:center;justify-content:center;color:var(--sub);text-align:center;padding:16px;font-size:14px}
 
+/* App-Seiten auf Handy/Tablet: Beispielbild rechts (ca. 50 %), Text links daneben */
+@media (max-width:859px){
+  .app-head{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:center}
+  .app-head > div:first-child{min-width:0}
+  .app-head .shot{max-width:none;width:100%;justify-self:stretch;border-width:6px;border-radius:26px;font-size:12px}
+  .app-head h1{font-size:clamp(26px,7.5vw,40px);hyphens:auto;-webkit-hyphens:auto}
+  .app-head .lead{font-size:15px}
+  .app-head .btns{margin-top:18px}
+  .app-head .btn{min-height:42px;padding:0 14px;font-size:14px;width:auto}
+}
+
 @supports not (aspect-ratio:1/1){
   .tile{height:0;padding:0 0 100%}
   .shot{height:0;padding:0 0 211%}
