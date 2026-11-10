@@ -393,7 +393,9 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
 .hub .stamp-c{animation-delay:.2s}
 .hub .stamp-k{animation-delay:1.38s}                 /* .2 + .38 + .8 */
 .hub .hub-logo .line{animation:ck-line .7s cubic-bezier(.16,.84,.32,1) 2.56s both}
-.hub .hub-logo .sub{animation:ck-flow 1.1s cubic-bezier(.45,.05,.35,1) 2.56s both, ck-flash .7s ease-out 3.7s both}
+.hub .hub-logo .sub{animation:ck-flow 1.1s cubic-bezier(.45,.05,.35,1) 2.56s both}
+/* Aufleuchten läuft Buchstabe für Buchstabe von links nach rechts, beginnend beim „D“ */
+.hub .hub-logo .sub .ch{display:inline-block;animation:ck-flash .55s ease-out calc(3.7s + var(--i) * .07s) both}
 @keyframes ck-stamp{
   0%  {opacity:0;transform:scale(2.6) rotate(-6deg);filter:blur(6px)}
   60% {opacity:1;transform:scale(.92) rotate(1deg);filter:blur(0)}
@@ -412,7 +414,7 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
 }
 /* Erneuter Besuch der Startseite im selben Tab (kein Neuladen): kein Intro mehr,
    der Inhalt pulsiert nur 2× leicht. Beim ersten Laden oder Aktualisieren läuft das volle Intro. */
-.intro-seen .hub .stamp,.intro-seen .hub .hub-logo .line,.intro-seen .hub .hub-logo .sub,
+.intro-seen .hub .stamp,.intro-seen .hub .hub-logo .line,.intro-seen .hub .hub-logo .sub,.intro-seen .hub .hub-logo .sub .ch,
 .intro-seen .hub .orbit,.intro-seen .hub .ring{animation:none}
 .intro-seen .hub{animation:ck-soft-pulse 1.2s ease-in-out .25s 2}
 .intro-seen .hub .ring{animation:ck-soft-ring 1.2s ease-in-out .25s 2}
@@ -425,7 +427,7 @@ main > section.hero{padding-top:24px;padding-bottom:24px}
   50%{border-color:rgba(var(--ext),.55);box-shadow:0 0 0 3px rgba(var(--ext),.06),0 0 10px rgba(var(--ext),.15)}
 }
 @media (prefers-reduced-motion:reduce){
-  .hub,.hub.pulse-again,.hub.pulse-again .ring,.hub .ring,.hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .orbit{animation:none!important}
+  .hub,.hub.pulse-again,.hub.pulse-again .ring,.hub .ring,.hub .stamp,.hub .hub-logo .line,.hub .hub-logo .sub,.hub .hub-logo .sub .ch,.hub .orbit{animation:none!important}
 }
 
 /* Kreis-Knöpfe werden vom Kreiseffekt „eingeschaltet“: bis dahin unsichtbar, genau wenn
