@@ -452,14 +452,14 @@
     update();
   })();
 
-  /* ---------- Leuchten im Startbereich nach dem Intro ausblenden (wie die 3D-Tiefe bei 9 s) ---------- */
+  /* ---------- Leuchten im Startbereich direkt nach dem Intro ausblenden (wie die 3D-Tiefe bei 6 s) ---------- */
   (function () {
     var hub = document.querySelector('#start .hub');
     if (!hub) return;
     var instant = root.classList.contains('intro-seen') ||
       (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     if (instant) hub.classList.add('glow-off');
-    else setTimeout(function () { hub.classList.add('glow-off'); }, 9000);
+    else setTimeout(function () { hub.classList.add('glow-off'); }, 6000);
   })();
 
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
