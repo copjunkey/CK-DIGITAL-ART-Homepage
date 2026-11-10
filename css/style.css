@@ -656,6 +656,11 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
 }
 [data-theme="dark"] #apps .card{box-shadow:0 0 90px 12px rgba(var(--ext),.38),0 0 26px rgba(var(--ext),.32),0 18px 50px rgba(0,0,0,.5)}
 
+/* Alle Kacheln wie die Visitenkarte: drei eckige Ecken, unten rechts abgerundet */
+.card{border-radius:0 0 28px 0}
+.tile,.tile img{border-radius:0 0 24px 0}
+@media (max-width:480px){.card{border-radius:0 0 22px 0}.tile,.tile img{border-radius:0 0 18px 0}}
+
 /* ---------- Ablauf-/Beispiel-Karten ---------- */
 .card .num{display:block;color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.3em;margin-bottom:12px}
 .card .more{margin-top:12px}
