@@ -627,22 +627,24 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
 .bizcard-logo .sub{display:block;font-size:21px;letter-spacing:.45em;padding-left:.45em;color:var(--ink);text-transform:uppercase;
   text-shadow:1px 1px 0 rgba(var(--ext),.85),2px 2px 0 rgba(var(--ext),.6),3px 3px 0 rgba(var(--ext),.35),6px 8px 12px rgba(var(--ext),.3)}
 .bizcard-tag{list-style:none;margin:0;padding:0;font-size:25px;font-weight:600;color:var(--sub);letter-spacing:.02em;text-align:right;line-height:1.4}
-.bizcard-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.bizcard-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:nowrap}
 .bizcard-name{font-size:24px;font-weight:700;line-height:1.2}
 .bizcard-role{color:var(--accent);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px!important}
 .bizcard-contact{display:flex;flex-direction:column;align-items:flex-end;gap:12px;color:var(--sub);font-size:15px}
 .bizcard-contact .btn{min-height:46px;padding:0 22px}
 /* E-Mail-Adresse als Knopf */
-.bizcard-mail{gap:10px;text-transform:none;letter-spacing:.01em}
+.bizcard-mail{gap:10px;text-transform:none;letter-spacing:.01em;border-radius:0 0 16px 0;white-space:nowrap}
 .bizcard-mail svg{width:20px;height:20px;flex-shrink:0}
 [data-theme="dark"] .bizcard{box-shadow:0 0 90px 12px rgba(var(--ext),.38),0 0 26px rgba(var(--ext),.32),0 18px 50px rgba(0,0,0,.5)}
 @media (max-width:560px){
   .bizcard{aspect-ratio:auto;padding:28px 24px;border-radius:0 0 36px 0;gap:28px}
   /* Name + Inhaber links und E-Mail rechts in einer Zeile, Knopf flach darunter */
-  .bizcard-bottom{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:14px 12px}
-  .bizcard-contact{display:contents}
-  .bizcard-contact .btn{grid-column:1 / -1;width:100%;min-height:42px;padding:0 16px;font-size:15px}
-  .bizcard-name{font-size:17px}
+  /* Name links und E-Mail-Knopf rechts in einer Zeile */
+  .bizcard-bottom{gap:10px}
+  .bizcard-contact .btn{min-height:42px;padding:0 12px;font-size:13px;gap:7px;border-radius:0 0 12px 0}
+  .bizcard-mail svg{width:16px;height:16px}
+  .bizcard-contact{min-width:0}
+  .bizcard-name{font-size:15px;white-space:nowrap}
   .bizcard-role{font-size:11px}
   .bizcard-logo .ck{font-size:98px}
   .bizcard-logo .line{width:52px;height:4px}
@@ -650,6 +652,7 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
   .bizcard-tag{font-size:19px}
 }
 @supports not (aspect-ratio:1/1){ .bizcard{min-height:340px} }
+@media (max-width:400px){.bizcard-mail svg{display:none}}
 
 /* App-Kacheln mit demselben lila Backlight wie die Visitenkarte */
 #apps .card{
