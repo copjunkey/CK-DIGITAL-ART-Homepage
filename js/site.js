@@ -381,6 +381,30 @@
     update();
   })();
 
+  /* ---------- Rückkehr zum Startbereich: nur der kleine Effekt ----------
+     Verlässt man den Startbereich und kommt zurück (Scrollen, Menü, CK in der Fußzeile),
+     pulsiert der Inhalt 2× leicht. Das volle Intro läuft nur beim ersten Laden/Aktualisieren. */
+  (function () {
+    var hero = document.getElementById('start');
+    var hub = hero && hero.querySelector('.hub');
+    if (!hub || !('IntersectionObserver' in window)) return;
+    var introEnds = root.classList.contains('intro-seen') ? 0 : Date.now() + 6000;
+    var away = false;
+    new IntersectionObserver(function (entries) {
+      var en = entries[0];
+      var visible = en.isIntersecting && en.intersectionRatio >= 0.6;
+      if (!visible) { if (en.intersectionRatio < 0.2) away = true; return; }
+      if (!away || Date.now() < introEnds) return;
+      away = false;
+      hub.classList.remove('pulse-again');
+      void hub.offsetWidth; // Animation neu starten
+      hub.classList.add('pulse-again');
+    }, { threshold: [0, 0.2, 0.6, 1] }).observe(hero);
+    hub.addEventListener('animationend', function (e) {
+      if (e.target === hub && e.animationName === 'ck-soft-pulse') hub.classList.remove('pulse-again');
+    });
+  })();
+
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
   (function () {
     var toggle = document.querySelector('.accent-toggle');
