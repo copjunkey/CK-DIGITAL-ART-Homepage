@@ -292,8 +292,6 @@ body::before{
    Bereiche sind auf Handys beim Scrollen teuer und wirken ruckelig. Dort daher: kleinere
    Schatten, deckende Fußzeile, Bereiche nur einblenden (ohne Bewegung) und eingeblendet lassen. */
 @media (hover:none),(pointer:coarse),(max-width:768px){
-  .fx main > section > .wrap{transition:opacity .45s ease;will-change:auto}
-  .fx main > section:not(.is-visible) > .wrap{transform:none}
   #apps .card,[data-theme="dark"] #apps .card{box-shadow:0 0 18px rgba(var(--ext),.22)}
   .bizcard,[data-theme="dark"] .bizcard{box-shadow:0 0 24px rgba(var(--ext),.28)}
   .site-footer{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--footer-bg)!important}
@@ -866,4 +864,11 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
   .fx main > section > .wrap{opacity:1!important;transform:none!important}
   a{color:#000;text-decoration:underline}
   .foot-brand .ck{color:#000}
+}
+
+/* Handy/Tablet: Bereiche nur einblenden, ohne Bewegung (steht bewusst am Dateiende,
+   damit es die Desktop-Animation sicher überschreibt – auch im Querformat) */
+@media (hover:none),(pointer:coarse),(max-width:768px){
+  .fx main > section > .wrap{transition:opacity .45s ease;will-change:auto}
+  .fx main > section:not(.is-visible) > .wrap{transform:none}
 }
