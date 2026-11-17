@@ -548,6 +548,22 @@
     }
     mark(root.getAttribute('data-accent') || 'lila');
 
+    // Schalter „Leuchten aus“ (unabhängig von der Farbe, wird gemerkt)
+    var glowBtn = menu.querySelector('.glow-switch');
+    if (glowBtn) {
+      glowBtn.setAttribute('aria-checked', root.classList.contains('no-glow') ? 'true' : 'false');
+      glowBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var off = !root.classList.contains('no-glow');
+        root.classList.toggle('no-glow', off);
+        glowBtn.setAttribute('aria-checked', off ? 'true' : 'false');
+        try { localStorage.setItem('ck-glow', off ? 'off' : 'on'); } catch (err) {}
+        try {
+          var rest = (window.name || '').replace(/(?:^|;)ck-glow=(on|off)/, '');
+          window.name = (rest ? rest + ';' : '') + 'ck-glow=' + (off ? 'off' : 'on');
+        } catch (err) {}
+      });
+    }
     toggle.addEventListener('click', function (e) {
       e.stopPropagation();
       open(menu.hidden);

@@ -247,8 +247,6 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   -webkit-appearance:none;appearance:none;
   transition:opacity .3s ease,transform .3s ease,background-color .2s ease;
 }
-/* Burger ohne Leuchten */
-.quick-toggle{box-shadow:none}
 /* Burger durchsichtig (30 % Deckkraft), beim Antippen/Öffnen voll sichtbar */
 .quick-toggle{opacity:.3}
 .quick-toggle:active,.quick-toggle:focus-visible,.quick-toggle[aria-expanded="true"]{opacity:1}
@@ -912,3 +910,20 @@ html[data-accent="verlauf"] :is(.hub .ring,.hub .ring::before,.rail .dot,.rail .
   .card-link,.site-footer a,.accent-toggle .dot,.quick-toggle,.quick-nav a,.icon-btn,.service h3,.more svg,body::before){
   transition-property:opacity,transform!important;
 }
+
+/* ---------- Schalter „Leuchten aus“ in der Farbwahl ----------
+   Entfernt alle Leucht-Effekte (Schein, Glühen, 3D-Schatten der Schrift); die Kugel behält ihre Form. */
+html.no-glow *:not(.ring),html.no-glow *::after,html.no-glow *:not(.ring)::before{
+  box-shadow:none!important;text-shadow:none!important;filter:none!important;
+}
+html.no-glow .ring{box-shadow:none!important}
+.accent-menu button{white-space:nowrap}
+.accent-menu .sep{height:1px;margin:6px 4px;background:var(--line)}
+.accent-menu .glow-switch .knob{
+  position:relative;width:34px;height:20px;border-radius:999px;background:var(--line);flex-shrink:0;transition:background-color .2s;
+}
+.accent-menu .glow-switch .knob::after{
+  content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ink);transition:transform .2s;
+}
+.accent-menu .glow-switch[aria-checked="true"] .knob{background:var(--accent)}
+.accent-menu .glow-switch[aria-checked="true"] .knob::after{transform:translateX(14px)}
