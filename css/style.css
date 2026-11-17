@@ -247,6 +247,10 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   -webkit-appearance:none;appearance:none;
   transition:opacity .3s ease,transform .3s ease,background-color .2s ease;
 }
+/* Burger leicht durchsichtig (60 % Deckkraft), beim Antippen/Öffnen voll sichtbar */
+.quick-toggle{opacity:.6}
+.quick-toggle:active,.quick-toggle:focus-visible,.quick-toggle[aria-expanded="true"]{opacity:1}
+@media (hover:hover) and (pointer:fine){.quick-toggle:hover{opacity:1}}
 .quick-menu.is-hidden .quick-toggle{opacity:0;transform:scale(.6);pointer-events:none}
 .quick-toggle[aria-expanded="true"] .burger{background:transparent}
 .quick-toggle[aria-expanded="true"] .burger::before{transform:translateY(7px) rotate(45deg)}
