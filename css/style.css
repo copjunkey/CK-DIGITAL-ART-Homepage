@@ -262,6 +262,31 @@ body::before{
   .quick-nav a:hover{background:var(--accent);color:var(--accent-ink)}
 }
 
+/* ---------- Orientierungsstrahl links (nur Desktop/Tablet quer) ----------
+   Senkrechte Linie mit einem Punkt je Bereich, Nummer daneben; der aktive Punkt leuchtet. */
+.rail{display:none}
+@media (min-width:1024px){
+  .rail{
+    display:block;position:fixed;z-index:9;left:28px;top:50%;
+    transform:translateY(calc(-50% - var(--footer-h) / 2));
+  }
+  .rail ol{list-style:none;margin:0;padding:0;position:relative;display:flex;flex-direction:column;gap:34px}
+  .rail ol::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+  .rail a{display:flex;align-items:center;gap:14px;flex-direction:row-reverse;justify-content:flex-end;
+    text-decoration:none;color:var(--sub);min-height:24px}
+  .rail .dot{position:relative;width:11px;height:11px;border-radius:50%;flex-shrink:0;
+    background:var(--bg);border:1.5px solid var(--sub);transition:background-color .3s,border-color .3s,box-shadow .3s,transform .3s}
+  .rail .num{font-size:12px;font-weight:600;letter-spacing:.12em;opacity:.55;transition:opacity .3s,color .3s}
+  .rail a.is-active .dot{background:var(--accent);border-color:var(--accent);transform:scale(1.25);
+    box-shadow:0 0 0 4px rgba(var(--ext),.18),0 0 14px rgba(var(--ext),.9)}
+  .rail a.is-active .num{opacity:1;color:var(--ink)}
+}
+@media (min-width:1024px) and (hover:hover) and (pointer:fine){
+  .rail a:hover .num{opacity:1;color:var(--ink)}
+  .rail a:hover .dot{border-color:var(--accent)}
+}
+@media print{.rail{display:none!important}}
+
 /* ---------- Hinweis „geht weiter nach unten“ (zwei kleine Doppelspitzen) ---------- */
 .scroll-hint{
   position:fixed;z-index:9;left:50%;bottom:calc(var(--footer-h) + 10px);

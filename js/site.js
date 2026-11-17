@@ -462,6 +462,30 @@
     else setTimeout(function () { hub.classList.add('glow-off'); }, 8700);   // nach dem Ausblenden (6 s + 2,6 s)
   })();
 
+  /* ---------- Orientierungsstrahl: aktiven Bereich markieren ---------- */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.rail a[data-rail]'));
+    if (!links.length) return;
+    var map = links.map(function (a) { return { a: a, s: document.getElementById(a.getAttribute('data-rail')) }; })
+                   .filter(function (m) { return m.s; });
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var line = window.innerHeight * 0.4, active = map[0];
+      map.forEach(function (m) { if (m.s.getBoundingClientRect().top <= line) active = m; });
+      if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2) active = map[map.length - 1];
+      map.forEach(function (m) {
+        var on = m === active;
+        m.a.classList.toggle('is-active', on);
+        if (on) m.a.setAttribute('aria-current', 'location'); else m.a.removeAttribute('aria-current');
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
   (function () {
     var toggle = document.querySelector('.accent-toggle');
