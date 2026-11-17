@@ -932,8 +932,8 @@ html.no-glow .ring{box-shadow:none!important}
    Halbtransparente, leicht helle Fläche mit Unschärfe dahinter, feiner heller Rand und
    Lichtkante oben links. Ohne backdrop-filter (alte Browser) etwas deckender. */
 .card,#apps .card,.bizcard,.tile{
-  background:linear-gradient(135deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.04) 45%,rgba(255,255,255,.02) 100%),rgba(23,23,29,.55);
-  -webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
+  background:linear-gradient(135deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.04) 45%,rgba(255,255,255,.02) 100%),rgba(23,23,29,.32);
+  -webkit-backdrop-filter:blur(26px) saturate(160%);backdrop-filter:blur(26px) saturate(160%);
 }
 .card,.tile{border:1px solid rgba(255,255,255,.14)}
 .card-link{border-color:rgba(255,255,255,.22)}
@@ -943,5 +943,5 @@ html.no-glow .ring{box-shadow:none!important}
 }
 /* Handy: etwas weniger Unschärfe, schont die Leistung beim Scrollen */
 @media (hover:none),(pointer:coarse),(max-width:768px){
-  .card,#apps .card,.bizcard,.tile{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .card,#apps .card,.bizcard,.tile{-webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%)}
 }
