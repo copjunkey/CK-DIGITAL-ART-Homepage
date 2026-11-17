@@ -887,3 +887,10 @@ html.body-scroll body{
   overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
   min-height:0;scroll-padding-top:0;
 }
+
+/* Handy/Tablet (Touch): Burger rechts auf halber Höhe – mit dem Daumen gut erreichbar.
+   Die Bereiche klappen links neben dem Knopf auf, mittig zu ihm ausgerichtet. */
+@media (hover:none) and (pointer:coarse){
+  .quick-menu{top:calc(50% - 26px - var(--footer-h) / 2);right:12px;display:block}
+  .quick-nav{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%);align-items:flex-end}
+}
