@@ -287,6 +287,18 @@ body::before{
 }
 @media print{.rail{display:none!important}}
 
+/* ---------- Flüssiges Scrollen auf Handy/Tablet ----------
+   Große Leucht-Schatten, Unschärfe hinter der Fußzeile und das Verschieben/Skalieren ganzer
+   Bereiche sind auf Handys beim Scrollen teuer und wirken ruckelig. Dort daher: kleinere
+   Schatten, deckende Fußzeile, Bereiche nur einblenden (ohne Bewegung) und eingeblendet lassen. */
+@media (hover:none),(pointer:coarse),(max-width:768px){
+  .fx main > section > .wrap{transition:opacity .45s ease;will-change:auto}
+  .fx main > section:not(.is-visible) > .wrap{transform:none}
+  #apps .card,[data-theme="dark"] #apps .card{box-shadow:0 0 18px rgba(var(--ext),.22)}
+  .bizcard,[data-theme="dark"] .bizcard{box-shadow:0 0 24px rgba(var(--ext),.28)}
+  .site-footer{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--footer-bg)!important}
+}
+
 /* ---------- Hinweis „geht weiter nach unten“ (zwei kleine Doppelspitzen) ---------- */
 .scroll-hint{
   position:fixed;z-index:9;left:50%;bottom:calc(var(--footer-h) + 10px);

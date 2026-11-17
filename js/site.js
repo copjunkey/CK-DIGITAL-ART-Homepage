@@ -135,12 +135,15 @@
     var sections = document.querySelectorAll('main > section');
     if (!sections.length) return;
     root.classList.add('fx');
+    var touch = window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches;
     var steps = [];
     for (var i = 0; i <= 20; i++) steps.push(i / 20);
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         var vh = window.innerHeight || document.documentElement.clientHeight;
         var shown = en.isIntersecting && (en.intersectionRatio >= 0.35 || en.intersectionRect.height >= vh * 0.35);
+        // Auf Touch-Geräten einmal eingeblendet lassen (kein erneutes Aus-/Einblenden beim Scrollen)
+        if (touch) { if (shown) { en.target.classList.add('is-visible'); io.unobserve(en.target); } return; }
         en.target.classList.toggle('is-visible', shown);
       });
     }, { threshold: steps });
