@@ -3,6 +3,15 @@
 (function () {
   var root = document.documentElement;
 
+  /* ---------- Scroll-Helfer ----------
+     Auf Touch-Geräten (html.body-scroll) scrollt nur der Inhalt (body), nicht die ganze Seite.
+     Dadurch blendet der Handy-Browser seine Leisten nicht mehr aus, Fußzeile & Co. stehen still. */
+  var bodyScroll = root.classList.contains('body-scroll');
+  var ckScroller = bodyScroll ? document.body : window;
+  function ckY() { return bodyScroll ? document.body.scrollTop : window.pageYOffset; }
+  function ckTo(y) { if (bodyScroll) document.body.scrollTop = y; else window.scrollTo(0, y); }
+  function ckH() { return bodyScroll ? document.body.scrollHeight : document.documentElement.scrollHeight; }
+
   /* ---------- Effektfarbe über den Seitenwechsel mitnehmen ----------
      In Vorschau-Fenstern und bei lokal geöffneten Dateien teilen Browser den Speicher
      oft nicht zwischen den Seiten. Dort hängen wir die Farbe an den Link an
@@ -118,11 +127,11 @@
     if (hashHasTarget) return;
     var nav = performance && performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
     if (nav && nav.type === 'back_forward') return;
-    window.scrollTo(0, 0);
+    ckTo(0);
     var top = document.getElementById('inhalt') || document.body;
     if (top && top.scrollIntoView) {
       try { top.scrollIntoView({ block: 'start', behavior: 'auto' }); } catch (e) { top.scrollIntoView(true); }
-      window.scrollTo(0, 0);
+      ckTo(0);
     }
   })();
 
@@ -171,8 +180,8 @@
       var pos = window.getComputedStyle(header).position;
       return (pos === 'sticky' || pos === '-webkit-sticky' || pos === 'fixed') ? header.offsetHeight : 0;
     }
-    function maxScroll() { return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
-    function topOf(el) { return Math.round(el.getBoundingClientRect().top + window.pageYOffset - headerH()); }
+    function maxScroll() { return Math.max(0, ckH() - window.innerHeight); }
+    function topOf(el) { return Math.round(el.getBoundingClientRect().top + ckY() - headerH()); }
     function stops() {
       var list = sections.map(topOf);
       if (list[0] < 40) list[0] = 0; // erster Bereich = ganz oben
@@ -185,13 +194,13 @@
     function menuOpen() { return menuBtn && menuBtn.getAttribute('aria-expanded') === 'true'; }
 
     function animateTo(y) {
-      var start = window.pageYOffset, diff = y - start, t0 = null;
+      var start = ckY(), diff = y - start, t0 = null;
       if (Math.abs(diff) < 2) return;
       busy = true;
       function step(ts) {
         if (t0 === null) t0 = ts;
         var p = Math.min(1, (ts - t0) / DURATION);
-        window.scrollTo(0, start + diff * ease(p));
+        ckTo(start + diff * ease(p));
         if (p < 1) requestAnimationFrame(step);
         else { busy = false; lockUntil = Date.now() + 300; }
       }
@@ -200,7 +209,7 @@
 
     // Liefert das Ziel für eine Richtung – oder null, wenn normal gescrollt werden soll
     function targetFor(dir) {
-      var y = window.pageYOffset, vh = window.innerHeight, list = stops(), hh = headerH();
+      var y = ckY(), vh = window.innerHeight, list = stops(), hh = headerH();
       var idx = 0;
       for (var i = 0; i < list.length; i++) if (list[i] <= y + 4) idx = i;
       var sec = sections[idx];
@@ -357,11 +366,11 @@
       clearTimeout(rt);
       rt = setTimeout(function () {
         if (busy) return;
-        var y = window.pageYOffset, list = stops(), best = list[0];
+        var y = ckY(), list = stops(), best = list[0];
         for (var i = 0; i < list.length; i++) if (Math.abs(list[i] - y) < Math.abs(best - y)) best = list[i];
         var sec = null;
         for (var j = 0; j < sections.length; j++) if (Math.abs(topOf(sections[j]) - best) < 2) sec = sections[j];
-        if (sec && sec.offsetHeight <= window.innerHeight + 4 && Math.abs(best - y) < window.innerHeight * 0.5) window.scrollTo(0, best);
+        if (sec && sec.offsetHeight <= window.innerHeight + 4 && Math.abs(best - y) < window.innerHeight * 0.5) ckTo(best);
       }, 250);
     });
   })();
@@ -391,7 +400,7 @@
         if (map[j].sec.getBoundingClientRect().top <= line) active = map[j];
       }
       // Ganz unten angekommen: letzten Bereich (Kontakt) markieren
-      if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2) {
+      if (window.innerHeight + ckY() >= ckH() - 2) {
         active = map[map.length - 1];
       }
       for (var n = 0; n < map.length; n++) {
@@ -402,7 +411,7 @@
       }
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-    window.addEventListener('scroll', onScroll, { passive: true });
+    ckScroller.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
   })();
@@ -445,11 +454,11 @@
     function update() {
       ticking = false;
       // Sichtbar, solange es auf der Seite weiter nach unten geht; nur ganz unten aus
-      var more = document.documentElement.scrollHeight - (window.pageYOffset + window.innerHeight) > 24;
+      var more = ckH() - (ckY() + window.innerHeight) > 24;
       hint.classList.toggle('is-visible', more);
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-    window.addEventListener('scroll', onScroll, { passive: true });
+    ckScroller.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     window.addEventListener('load', update);
     update();
@@ -476,7 +485,7 @@
       ticking = false;
       var line = window.innerHeight * 0.4, active = map[0];
       map.forEach(function (m) { if (m.s.getBoundingClientRect().top <= line) active = m; });
-      if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2) active = map[map.length - 1];
+      if (window.innerHeight + ckY() >= ckH() - 2) active = map[map.length - 1];
       map.forEach(function (m) {
         var on = m === active;
         m.a.classList.toggle('is-active', on);
@@ -484,7 +493,7 @@
       });
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-    window.addEventListener('scroll', onScroll, { passive: true });
+    ckScroller.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
   })();

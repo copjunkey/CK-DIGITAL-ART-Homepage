@@ -872,3 +872,11 @@ main > section.gallery-page{justify-content:flex-start;padding-top:32px;padding-
   .fx main > section > .wrap{transition:opacity .45s ease;will-change:auto}
   .fx main > section:not(.is-visible) > .wrap{transform:none}
 }
+
+/* Touch-Geräte: Inhalt scrollt im body statt der ganzen Seite – die Browser-Leisten bleiben
+   dauerhaft eingeblendet, dadurch springen Fußzeile, Pfeile und Zurück-Knopf nicht mehr. */
+html.body-scroll,html.body-scroll body{height:100%;overflow:hidden}
+html.body-scroll body{
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
+  min-height:0;scroll-padding-top:0;
+}
