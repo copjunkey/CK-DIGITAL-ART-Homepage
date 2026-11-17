@@ -16,7 +16,7 @@
      In Vorschau-Fenstern und bei lokal geöffneten Dateien teilen Browser den Speicher
      oft nicht zwischen den Seiten. Dort hängen wir die Farbe an den Link an
      (z. B. galerie.html#mint oder index.html#apps--mint) und lesen sie hier wieder aus. */
-  var ACCENTS = /^(lila|tuerkis|orange|rot|mint|weiss)$/;
+  var ACCENTS = /^(lila|tuerkis|orange|rot|mint|weiss|verlauf)$/;
   function saveAccent(key) {
     try { localStorage.setItem('ck-accent', key); } catch (e) {}
     try {
@@ -27,7 +27,7 @@
   var jumpId = '';
   var hashHasTarget = !!location.hash;
   (function () {
-    var m = /^#(?:(.*)--)?(lila|tuerkis|orange|rot|mint|weiss)$/.exec(location.hash || '');
+    var m = /^#(?:(.*)--)?(lila|tuerkis|orange|rot|mint|weiss|verlauf)$/.exec(location.hash || '');
     if (!m) return;
     saveAccent(m[2]);
     jumpId = m[1] || '';
@@ -498,6 +498,36 @@
     update();
   })();
 
+  /* ---------- Farbverlauf: Effektfarbe wandert in 20 s durch alle Farben und wiederholt sich ---------- */
+  var cycle = (function () {
+    var COLS = [[139,108,255],[34,211,238],[61,220,151],[244,244,246],[255,138,61],[255,77,94]]; // Lila, Türkis, Mint, Weiß, Orange, Rot
+    var PERIOD = 20000, timer = null, t0 = 0;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function paint() {
+      var p = ((Date.now() - t0) % PERIOD) / PERIOD * COLS.length;
+      var i = Math.floor(p), f = p - i, a = COLS[i], b = COLS[(i + 1) % COLS.length];
+      var ease = f * f * (3 - 2 * f);
+      var c = [0, 1, 2].map(function (k) { return Math.round(a[k] + (b[k] - a[k]) * ease); });
+      var hex = '#' + c.map(function (v) { return ('0' + v.toString(16)).slice(-2); }).join('');
+      root.style.setProperty('--ext', c.join(','));
+      root.style.setProperty('--accent', hex);
+      root.style.setProperty('--accent-hover', hex);
+      root.style.setProperty('--footer-accent', hex);
+    }
+    return {
+      start: function () {
+        if (timer) return;
+        t0 = Date.now(); paint();
+        if (!reduce) timer = setInterval(paint, 80);   // ~12 Bilder/s: weich genug, schont das Handy
+      },
+      stop: function () {
+        clearInterval(timer); timer = null;
+        ['--ext', '--accent', '--accent-hover', '--footer-accent'].forEach(function (v) { root.style.removeProperty(v); });
+      }
+    };
+  })();
+  if (root.getAttribute('data-accent') === 'verlauf') cycle.start();
+
   /* ---------- Effektfarbe wählen (Kreis-Knopf mit Dropdown) ---------- */
   (function () {
     var toggle = document.querySelector('.accent-toggle');
@@ -527,6 +557,7 @@
         var key = it.getAttribute('data-accent');
         if (!ACCENTS.test(key)) return;
         root.setAttribute('data-accent', key);
+        if (key === 'verlauf') cycle.start(); else cycle.stop();
         mark(key);
         saveAccent(key);
         open(false);
