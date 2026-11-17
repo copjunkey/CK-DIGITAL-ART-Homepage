@@ -898,3 +898,15 @@ html.body-scroll body{
   .quick-menu{top:calc(50% - 26px - var(--footer-h) / 2);right:12px;display:block}
   .quick-nav{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%);align-items:flex-end}
 }
+
+/* ---------- Alles im Gleichtakt ----------
+   1) Das Intro startet erst, wenn die Schrift geladen ist (Klasse .wait setzt das Kopf-Skript,
+      spätestens nach 1,5 s geht es los) – so beginnen Schrift-, Kreis-, Knopf- und Hintergrund-
+      Effekte exakt gleichzeitig und nichts „springt“ beim Schriftwechsel.
+   2) Beim Farbverlauf ändern sich die Farben laufend: Farb-Übergänge (transition) würden einzelne
+      Elemente hinterherhinken lassen. Daher dort nur Bewegung/Deckkraft weich, Farben sofort. */
+html.wait .hub,html.wait .hub *,html.wait .hub *::before,html.wait .hub *::after{animation-play-state:paused!important}
+html[data-accent="verlauf"] :is(.hub .ring,.hub .ring::before,.rail .dot,.rail .num,.nav a,.orbit,.btn,.back-link,
+  .card-link,.site-footer a,.accent-toggle .dot,.quick-toggle,.quick-nav a,.icon-btn,.service h3,.more svg,body::before){
+  transition-property:opacity,transform!important;
+}

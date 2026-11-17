@@ -501,10 +501,10 @@
   /* ---------- Farbverlauf: Effektfarbe wandert in 20 s durch alle Farben und wiederholt sich ---------- */
   var cycle = (function () {
     var COLS = [[139,108,255],[34,211,238],[61,220,151],[244,244,246],[255,138,61],[255,77,94]]; // Lila, Türkis, Mint, Weiß, Orange, Rot
-    var PERIOD = 20000, timer = null, t0 = 0;
+    var PERIOD = 20000, timer = null;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function paint() {
-      var p = ((Date.now() - t0) % PERIOD) / PERIOD * COLS.length;
+      var p = (Date.now() % PERIOD) / PERIOD * COLS.length;   // gemeinsame Uhr: gleiche Farbe auf allen Seiten, kein Sprung beim Laden
       var i = Math.floor(p), f = p - i, a = COLS[i], b = COLS[(i + 1) % COLS.length];
       var ease = f * f * (3 - 2 * f);
       var c = [0, 1, 2].map(function (k) { return Math.round(a[k] + (b[k] - a[k]) * ease); });
@@ -517,7 +517,7 @@
     return {
       start: function () {
         if (timer) return;
-        t0 = Date.now(); paint();
+        paint();
         if (!reduce) timer = setInterval(paint, 80);   // ~12 Bilder/s: weich genug, schont das Handy
       },
       stop: function () {
