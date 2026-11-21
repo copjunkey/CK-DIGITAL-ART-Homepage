@@ -1,6 +1,6 @@
 # CK-DIGITAL-ART-Homepage
 
-Homepage von CK - DIGITAL ART (Inhaber Christian Kohl). Schlichtes HTML/CSS, ohne Build und ohne externe Dienste.
+Homepage von CK - Digital Art (Inhaber Christian Kohl). Schlichtes HTML/CSS, ohne Build und ohne externe Dienste.
 
 ## Seiten
 - `index.html` – Start, Leistungen, Apps, Fotografie, Kontakt

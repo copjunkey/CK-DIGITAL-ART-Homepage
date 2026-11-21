@@ -1,4 +1,4 @@
-/* CK - DIGITAL ART – Effektfarbe, Bereichs-Steuerung, Seitenwechsel und Burger-Menü.
+/* CK - Digital Art – Effektfarbe, Bereichs-Steuerung, Seitenwechsel und Burger-Menü.
    Ohne JavaScript: dunkles Design in Lila und Menü immer sichtbar. */
 (function () {
   var root = document.documentElement;
