@@ -947,4 +947,4 @@ html.no-glow .ring{box-shadow:none!important}
 }
 
 /* Bereichsnummer vor den Überschriften (02 Services, 03 Apps …) */
-.sec-num{color:var(--accent);font-size:.55em;font-weight:600;letter-spacing:.08em;margin-right:.45em;vertical-align:.35em}
+.sec-num{color:var(--accent);font-size:1em;font-weight:inherit;letter-spacing:inherit;margin-right:.6em;vertical-align:baseline}
