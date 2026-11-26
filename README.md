@@ -20,4 +20,4 @@ Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner
 3. Beim Anbieter DNS-Einträge auf GitHub Pages setzen, „Enforce HTTPS“ aktivieren.
 
 ## Wichtig
-- `google670eee6649b2bd19.html` nie löschen: bestätigt die Inhaberschaft in der Google Search Console (Voraussetzung für das Google-Play-Entwicklerkonto von CK - Digital Art).
+- `google670eee6649b2bd19.html` und `google4e2f47189cdf7a26.html` (Konto ck-digital-art@web.de) nie löschen: bestätigt die Inhaberschaft in der Google Search Console (Voraussetzung für das Google-Play-Entwicklerkonto von CK - Digital Art).
