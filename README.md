@@ -18,3 +18,6 @@ Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner
 1. Domain beim Anbieter kaufen.
 2. Settings → Pages → Custom domain eintragen (legt eine `CNAME`-Datei an).
 3. Beim Anbieter DNS-Einträge auf GitHub Pages setzen, „Enforce HTTPS“ aktivieren.
+
+## Wichtig
+- `google670eee6649b2bd19.html` nie löschen: bestätigt die Inhaberschaft in der Google Search Console (Voraussetzung für das Google-Play-Entwicklerkonto von CK - Digital Art).
