@@ -945,3 +945,6 @@ html.no-glow .ring{box-shadow:none!important}
 @media (hover:none),(pointer:coarse),(max-width:768px){
   .card,#apps .card,.bizcard,.tile{-webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%)}
 }
+
+/* Bereichsnummer vor den Überschriften (02 Services, 03 Apps …) */
+.sec-num{color:var(--accent);font-size:.55em;font-weight:600;letter-spacing:.08em;margin-right:.45em;vertical-align:.35em}
