@@ -447,7 +447,7 @@
     var hint = document.createElement('div');
     hint.className = 'scroll-hint';
     hint.setAttribute('aria-hidden', 'true');
-    hint.innerHTML = '<svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 6 24 12 42 6"/><polyline points="6 12 24 18 42 12"/></svg>';
+    hint.innerHTML = '<span class="hint-move"><svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 6 24 12 42 6"/><polyline points="6 12 24 18 42 12"/></svg></span>';
     document.body.appendChild(hint);
     var foot = document.querySelector('.site-footer');
     var ticking = false;

@@ -315,20 +315,22 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   color:var(--accent);opacity:0;transition:opacity .3s ease;
 }
 .scroll-hint.is-visible{opacity:.85}
-.scroll-hint svg{display:block;width:52px;height:26px;filter:drop-shadow(0 0 6px rgba(var(--ext),.5));animation:ck-hint 3.2s ease-in-out infinite}
-/* Gleitende Bewegung: eigene Grafikebene (translate3d + will-change), dadurch Bewegung in
-   Bruchteilen eines Pixels statt sichtbarer 1-px-Sprünge */
-@keyframes ck-hint{0%,100%{transform:translate3d(0,0,0);opacity:.7}50%{transform:translate3d(0,3px,0);opacity:1}}
-.scroll-hint svg{will-change:transform,opacity;backface-visibility:hidden}
+/* Leuchten sitzt auf dem ruhenden Rahmen, bewegt wird nur eine eigene Ebene darin.
+   So muss der Browser während der Bewegung nichts neu zeichnen, sondern verschiebt die
+   fertige Grafik stufenlos (auch in Bruchteilen eines Pixels). */
+.scroll-hint{filter:drop-shadow(0 0 6px rgba(var(--ext),.5))}
+.scroll-hint .hint-move{display:block;animation:ck-hint 2.8s cubic-bezier(.45,0,.55,1) infinite;will-change:transform;transform:translateZ(0)}
+.scroll-hint svg{display:block;width:52px;height:26px}
+@keyframes ck-hint{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,4px,0)}}
 /* Gleicher Effekt beim Pfeil der Zurück-Knöpfe – waagerecht, in Pfeilrichtung */
-@keyframes ck-hint-back{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-3px,0,0)}}
-.back-link svg{animation:ck-hint-back 3.2s ease-in-out infinite;will-change:transform;backface-visibility:hidden}
+.back-link .hint-move{display:block;flex-shrink:0;animation:ck-hint-back 2.8s cubic-bezier(.45,0,.55,1) infinite;will-change:transform;transform:translateZ(0)}
+@keyframes ck-hint-back{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-4px,0,0)}}
 /* Desktop: Pfeile doppelt so groß, doppelter Abstand zur Fußzeile */
 @media (min-width:769px) and (hover:hover) and (pointer:fine){
   .scroll-hint{bottom:calc(var(--footer-h) + 20px)}
   .scroll-hint svg{width:104px;height:52px}
 }
-@media (prefers-reduced-motion:reduce){.scroll-hint svg,.back-link svg{animation:none}}
+@media (prefers-reduced-motion:reduce){.scroll-hint .hint-move,.back-link .hint-move{animation:none}}
 @media print{.scroll-hint{display:none}}
 
 /* ---------- Bereiche ---------- */
@@ -392,7 +394,7 @@ html,body{overflow-x:hidden}
   transition:background-color .2s ease,color .2s ease,transform .2s ease,opacity .2s ease;
 }
 .back-link:focus-visible,.back-link:active{opacity:1}
-.back-link svg{width:24px;height:24px;flex-shrink:0}
+.back-link svg{display:block;width:24px;height:24px}
 @media (hover:hover) and (pointer:fine){
   .back-link:hover{opacity:1;background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
 }
