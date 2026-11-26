@@ -316,13 +316,19 @@ html[data-accent="verlauf"] .accent-toggle .dot{
 }
 .scroll-hint.is-visible{opacity:.85}
 .scroll-hint svg{display:block;width:52px;height:26px;filter:drop-shadow(0 0 6px rgba(var(--ext),.5));animation:ck-hint 3.2s ease-in-out infinite}
-@keyframes ck-hint{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(2px);opacity:1}}
+/* Gleitende Bewegung: eigene Grafikebene (translate3d + will-change), dadurch Bewegung in
+   Bruchteilen eines Pixels statt sichtbarer 1-px-Sprünge */
+@keyframes ck-hint{0%,100%{transform:translate3d(0,0,0);opacity:.7}50%{transform:translate3d(0,3px,0);opacity:1}}
+.scroll-hint svg{will-change:transform,opacity;backface-visibility:hidden}
+/* Gleicher Effekt beim Pfeil der Zurück-Knöpfe – waagerecht, in Pfeilrichtung */
+@keyframes ck-hint-back{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-3px,0,0)}}
+.back-link svg{animation:ck-hint-back 3.2s ease-in-out infinite;will-change:transform;backface-visibility:hidden}
 /* Desktop: Pfeile doppelt so groß, doppelter Abstand zur Fußzeile */
 @media (min-width:769px) and (hover:hover) and (pointer:fine){
   .scroll-hint{bottom:calc(var(--footer-h) + 20px)}
   .scroll-hint svg{width:104px;height:52px}
 }
-@media (prefers-reduced-motion:reduce){.scroll-hint svg{animation:none}}
+@media (prefers-reduced-motion:reduce){.scroll-hint svg,.back-link svg{animation:none}}
 @media print{.scroll-hint{display:none}}
 
 /* ---------- Bereiche ---------- */
