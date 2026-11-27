@@ -355,27 +355,6 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   .scroll-hint svg{width:104px;height:52px}
 }
 @media print{.scroll-hint{display:none}}
-/* ---------- Lasche am linken Rand (nur Handy/Tablet, nur Unterseiten) ----------
-   Zeigt, dass man die Seite nach rechts wegziehen kann, um zurückzugehen. Antippen geht ebenfalls zurück. */
-.swipe-tab{display:none}
-@media (hover:none),(pointer:coarse){
-  .swipe-tab{
-    display:block;position:fixed;z-index:9;left:0;top:calc(50% - 40px - var(--footer-h) / 2);
-    width:30px;height:80px;padding:0;margin:0;border:0;background:none;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;opacity:.7;transition:opacity .3s ease;
-  }
-  .swipe-tab-bar{
-    position:absolute;left:0;top:8px;width:14px;height:64px;display:flex;align-items:center;justify-content:center;
-    border-radius:0 10px 10px 0;color:var(--accent);
-    background:rgba(var(--ext),.16);border:1px solid rgba(var(--ext),.55);border-left:0;
-    box-shadow:0 0 12px rgba(var(--ext),.35);
-  }
-  .swipe-tab-bar svg{width:8px;height:13px;margin-left:-1px}
-  .swipe-tab:active{opacity:1}
-  .leave-left .swipe-tab,.leave-right .swipe-tab,.swiped .swipe-tab{opacity:0}
-  html.no-glow .swipe-tab-bar{box-shadow:none}
-}
-@media print{.swipe-tab{display:none!important}}
 
 /* ---------- Bereiche ---------- */
 section{padding:var(--section) 0}
