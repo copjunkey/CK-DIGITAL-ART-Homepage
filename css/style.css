@@ -313,15 +313,17 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   .rail a:hover .num{opacity:1;color:var(--ink)}
   .rail a:hover .dot{border-color:var(--accent)}
 }
-/* Namen der Unterseiten auf dunklem Milchglas, damit sie auch über Inhalten lesbar bleiben */
+/* Alle Punkte mit Namen, auf dunklem Milchglas, damit sie auch über Inhalten lesbar bleiben */
 @media (min-width:1024px){
-  .rail-sub .num{opacity:1;color:var(--sub);padding:3px 9px;margin:-3px 0;border-radius:6px;
-    background:rgba(18,18,24,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  .rail .num{opacity:1;color:var(--sub);padding:3px 9px;margin:-3px 0;border-radius:6px;white-space:nowrap;
+    letter-spacing:.04em;background:rgba(18,18,24,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
     border:1px solid rgba(255,255,255,.06)}
-  .rail-sub a.is-active .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
+  .rail .num b{font-weight:600;color:var(--accent);margin-right:2px}
+  .rail a.is-active .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
+  .rail a.is-parent .num{color:var(--ink);border-color:rgba(var(--ext),.3)}
 }
 @media (min-width:1024px) and (hover:hover) and (pointer:fine){
-  .rail-sub a:hover .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
+  .rail a:hover .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
 }
 @media print{.rail{display:none!important}}
 

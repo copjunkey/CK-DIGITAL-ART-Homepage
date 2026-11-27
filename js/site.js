@@ -504,7 +504,7 @@
     var html = MAIN.map(function (m) {
       var isP = m[0] === parent;
       return '<li' + (isP ? ' class="is-parent"' : '') + '><a href="index.html#' + m[0] + '" aria-label="' + m[2] + '"' +
-        (isP ? ' class="is-parent"' : '') + '><span class="num">' + m[1] + '</span><span class="dot" aria-hidden="true"></span></a>' +
+        (isP ? ' class="is-parent"' : '') + '><span class="num">' + (m[1] === m[2] ? m[2] : '<b>' + m[1] + '</b> ' + m[2]) + '</span><span class="dot" aria-hidden="true"></span></a>' +
         (isP ? railSubList(m[0], parseInt(m[1], 10), file, false) : '') + '</li>';
     }).join('');
     var nav = document.createElement('nav');
