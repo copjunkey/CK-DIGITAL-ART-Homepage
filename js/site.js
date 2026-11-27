@@ -474,6 +474,35 @@
     else setTimeout(function () { hub.classList.add('glow-off'); }, 8700);   // nach dem Ausblenden (6 s + 2,6 s)
   })();
 
+  /* ---------- Orientierungsstrahl auf Unterseiten: aus den Bereichen der Seite erzeugen ----------
+     Erster Bereich = „Start“, danach 02, 03 … (wie auf der Startseite). Nur bei mindestens 2 Bereichen. */
+  (function () {
+    if (document.querySelector('.rail')) return;
+    var secs = Array.prototype.slice.call(document.querySelectorAll('main > section'));
+    if (secs.length < 2) return;
+    var used = {};
+    var items = secs.map(function (s, i) {
+      var h = s.querySelector('h1, h2');
+      var label = h ? h.textContent.replace(/\s+/g, ' ').trim() : 'Bereich ' + (i + 1);
+      if (!s.id) {
+        var id = 'b-' + label.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        while (!id || used[id] || document.getElementById(id)) id += '-' + (i + 1);
+        s.id = id;
+      }
+      used[s.id] = 1;
+      var num = i === 0 ? 'Start' : (i + 1 < 10 ? '0' : '') + (i + 1);
+      return '<li><a href="#' + s.id + '" data-rail="' + s.id + '" aria-label="' + label.replace(/"/g, '&quot;') +
+        '"><span class="num">' + num + '</span><span class="dot" aria-hidden="true"></span></a></li>';
+    });
+    var nav = document.createElement('nav');
+    nav.className = 'rail';
+    nav.setAttribute('aria-label', 'Bereiche');
+    nav.innerHTML = '<ol>' + items.join('') + '</ol>';
+    var foot = document.querySelector('.site-footer');
+    if (foot) foot.parentNode.insertBefore(nav, foot); else document.body.appendChild(nav);
+  })();
+
   /* ---------- Orientierungsstrahl: aktiven Bereich markieren ---------- */
   (function () {
     var links = Array.prototype.slice.call(document.querySelectorAll('.rail a[data-rail]'));
