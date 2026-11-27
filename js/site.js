@@ -289,6 +289,18 @@
     var tx = 0, ty = 0, mode = '', dragX = 0;
     var backLink = document.querySelector('.back-link');
     var movers = Array.prototype.slice.call(document.querySelectorAll('main'));
+    // Lasche am linken Rand: zeigt auf dem Handy, dass man die Seite nach rechts wegziehen kann (= zurück)
+    var tab = null;
+    if (backLink) {
+      tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'swipe-tab';
+      tab.setAttribute('aria-label', backLink.getAttribute('aria-label') || 'Zurück');
+      tab.innerHTML = '<span class="swipe-tab-bar"><svg viewBox="0 0 10 16" fill="none" stroke="currentColor" stroke-width="2" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 3 7 8 3 13"/></svg></span>';
+      tab.addEventListener('click', function () { backLink.click(); });
+      document.body.appendChild(tab);
+    }
     var THRESHOLD = 0.35, MIN_FLICK = 60, FLICK_SPEED = 0.45; // Anteil der Breite, px, px pro ms
     var samples = [];
 
@@ -300,9 +312,11 @@
         el.style.transform = x ? 'translateX(' + x + 'px)' : '';
         el.style.opacity = x ? String(1 - p * 0.7) : '';
       });
+      if (tab) { tab.style.transition = withTransition ? 'opacity .32s ease' : 'none'; tab.style.opacity = x ? '0' : ''; }
     }
     function clearDrag() {
       movers.forEach(function (el) { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; });
+      if (tab) { tab.style.transition = ''; tab.style.opacity = ''; }
     }
 
     window.addEventListener('touchstart', function (e) {
@@ -310,7 +324,7 @@
       tx = e.touches[0].clientX; ty = e.touches[0].clientY;
       mode = ''; dragX = 0; samples = [];
       // Rand-Geste des Browsers (iPhone „Zurück“ vom linken Rand) nicht stören
-      if (tx < 24) mode = 'ignore';
+      if (tx < 24 && !(tab && tab.contains(e.target))) mode = 'ignore';
     }, { passive: true });
 
     window.addEventListener('touchmove', function (e) {
