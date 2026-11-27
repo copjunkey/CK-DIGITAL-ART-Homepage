@@ -376,7 +376,6 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   html.no-glow .swipe-tab-bar{box-shadow:none}
 }
 @media print{.swipe-tab{display:none!important}}
-}
 
 /* ---------- Bereiche ---------- */
 section{padding:var(--section) 0}
@@ -446,6 +445,7 @@ html,body{overflow-x:hidden}
 @media (min-width:769px) and (hover:hover) and (pointer:fine){
   .back-bar{left:calc(50% + 52px + 28px);bottom:calc(var(--footer-h) + 22px)}
   .back-bar .back-link{min-height:48px;padding:0 20px 0 14px}
+}
 @media (hover:hover) and (pointer:fine){
   .back-link:hover{opacity:1;background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
 }
