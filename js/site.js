@@ -474,39 +474,38 @@
     else setTimeout(function () { hub.classList.add('glow-off'); }, 8700);   // nach dem Ausblenden (6 s + 2,6 s)
   })();
 
+  /* ---------- Orientierungsstrahl: Unterseiten je Bereich (immer nur die nächste Ebene) ---------- */
+  var RAIL_SUBS = {
+    services: [['leistung-apps.html', 'Apps & Software'], ['leistung-web-foto.html', 'Webdesign & Fotografie']],
+    apps: [['app1.html', 'Fokus'], ['app2.html', 'Vorrat'], ['app3.html', 'Wegbegleiter'], ['app4.html', 'Pflanzenpuls']],
+    fotografie: [['galerie.html', 'Galerie']]
+  };
+  function railSubList(key, n, current, collapsible) {
+    return '<ol class="rail-sub' + (collapsible ? ' collapsible' : '') + '">' + RAIL_SUBS[key].map(function (s, i) {
+      var cur = s[0] === current;
+      return '<li><a href="' + s[0] + '" aria-label="' + s[1].replace(/&/g, '&amp;') + '"' +
+        (cur ? ' class="is-active" aria-current="page"' : '') + (collapsible ? ' tabindex="-1"' : '') +
+        '><span class="num">' + n + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
+    }).join('') + '</ol>';
+  }
+
   /* ---------- Orientierungsstrahl auf Unterseiten ----------
-     Zeigt weiterhin den Hauptpfad der Startseite (Start, 02 … 05). Der Bereich, zu dem die Unterseite gehört,
-     ist markiert; darunter erscheinen – seitlich eingerückt – die Bereiche der geöffneten Unterseite (z. B. 3.1, 3.2). */
+     Hauptpfad der Startseite (Start, 02 … 05). Der Bereich, zu dem die Unterseite gehört, ist markiert;
+     darunter – seitlich eingerückt – nur die nächste Ebene: die Unterseiten dieses Bereichs, die geöffnete leuchtet. */
   (function () {
     if (document.querySelector('.rail')) return;
     var MAIN = [['start', 'Start', 'Start'], ['services', '02', 'Services'], ['apps', '03', 'Apps'],
                 ['fotografie', '04', 'Fotografie'], ['kontakt', '05', 'Kontakt']];
-    var page = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
-    var parent = /^app\d/.test(page) ? 'apps' : /^leistung-/.test(page) ? 'services' : page === 'galerie' ? 'fotografie' : '';
-    var secs = Array.prototype.slice.call(document.querySelectorAll('main > section'));
-    function esc(t) { return t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-    var sub = '';
-    if (parent && secs.length > 1) {
-      var used = {}, pNum = parseInt(MAIN.filter(function (m) { return m[0] === parent; })[0][1], 10);
-      sub = '<ol class="rail-sub">' + secs.map(function (s, i) {
-        var h = s.querySelector('h1, h2');
-        var label = h ? h.textContent.replace(/\s+/g, ' ').trim() : 'Bereich ' + (i + 1);
-        if (!s.id) {
-          var id = 'b-' + label.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-            .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-          while (!id || used[id] || document.getElementById(id)) id += '-' + (i + 1);
-          s.id = id;
-        }
-        used[s.id] = 1;
-        return '<li><a href="#' + s.id + '" data-rail="' + s.id + '" aria-label="' + esc(label) +
-          '"><span class="num">' + pNum + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
-      }).join('') + '</ol>';
-    }
+    var file = location.pathname.split('/').pop() || '';
+    var parent = '';
+    Object.keys(RAIL_SUBS).forEach(function (k) {
+      RAIL_SUBS[k].forEach(function (s) { if (s[0] === file) parent = k; });
+    });
     var html = MAIN.map(function (m) {
       var isP = m[0] === parent;
       return '<li' + (isP ? ' class="is-parent"' : '') + '><a href="index.html#' + m[0] + '" aria-label="' + m[2] + '"' +
         (isP ? ' class="is-parent"' : '') + '><span class="num">' + m[1] + '</span><span class="dot" aria-hidden="true"></span></a>' +
-        (isP ? sub : '') + '</li>';
+        (isP ? railSubList(m[0], parseInt(m[1], 10), file, false) : '') + '</li>';
     }).join('');
     var nav = document.createElement('nav');
     nav.className = 'rail rail-subpage';
@@ -521,22 +520,10 @@
   (function () {
     var rail = document.querySelector('.rail:not(.rail-subpage)');
     if (!rail) return;
-    var SUBS = {
-      services: [['leistung-apps.html', 'Apps & Software'], ['leistung-web-foto.html', 'Webdesign & Fotografie']],
-      apps: [['app1.html', 'Fokus'], ['app2.html', 'Vorrat'], ['app3.html', 'Wegbegleiter'], ['app4.html', 'Pflanzenpuls']],
-      fotografie: [['galerie.html', 'Galerie']]
-    };
-    Object.keys(SUBS).forEach(function (key) {
+    Object.keys(RAIL_SUBS).forEach(function (key) {
       var a = rail.querySelector('a[data-rail="' + key + '"]');
       if (!a) return;
-      var n = parseInt(a.querySelector('.num').textContent, 10);
-      var ol = document.createElement('ol');
-      ol.className = 'rail-sub collapsible';
-      ol.innerHTML = SUBS[key].map(function (s, i) {
-        return '<li><a href="' + s[0] + '" aria-label="' + s[1].replace(/&/g, '&amp;') + '" tabindex="-1"><span class="num">' +
-          n + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
-      }).join('');
-      a.parentNode.appendChild(ol);
+      a.insertAdjacentHTML('afterend', railSubList(key, parseInt(a.querySelector('.num').textContent, 10), '', true));
     });
     // Strang nach der zugeklappten Höhe ausrichten: Aufklappen wächst nur nach unten, die Hauptpunkte bleiben stehen
     function place() {
