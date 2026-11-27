@@ -193,16 +193,22 @@
     function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
     function menuOpen() { return menuBtn && menuBtn.getAttribute('aria-expanded') === 'true'; }
 
-    function animateTo(y) {
+    // lockId: bei direkten Sprüngen zeigt das Punktmenü sofort nur das Ziel (keine Zwischenbereiche aufklappen)
+    function animateTo(y, lockId) {
       var start = ckY(), diff = y - start, t0 = null;
       if (Math.abs(diff) < 2) return;
       busy = true;
+      window.ckRailLock = lockId || null;
+      if (lockId) window.dispatchEvent(new Event('ck-rail'));
       function step(ts) {
         if (t0 === null) t0 = ts;
         var p = Math.min(1, (ts - t0) / DURATION);
         ckTo(start + diff * ease(p));
         if (p < 1) requestAnimationFrame(step);
-        else { busy = false; lockUntil = Date.now() + 300; }
+        else {
+          busy = false; lockUntil = Date.now() + 300;
+          if (window.ckRailLock) { window.ckRailLock = null; window.dispatchEvent(new Event('ck-rail')); }
+        }
       }
       requestAnimationFrame(step);
     }
@@ -246,7 +252,7 @@
       if (!target || sections.indexOf(target) === -1) return;
       e.preventDefault();
       if (busy) return;
-      animateTo(Math.min(topOf(target), maxScroll()));
+      animateTo(Math.min(topOf(target), maxScroll()), id);
       try { if (location.hash !== '#' + id) history.pushState({ ck: id }, '', '#' + id); } catch (err) {}
     });
 
@@ -255,7 +261,7 @@
       var id = (location.hash || '').slice(1);
       var target = id ? document.getElementById(id) : null;
       if (id && (!target || sections.indexOf(target) === -1)) return;
-      animateTo(target ? Math.min(topOf(target), maxScroll()) : 0);
+      animateTo(target ? Math.min(topOf(target), maxScroll()) : 0, target ? id : sections[0].id);
     });
 
     /* Tasten: Pfeil, Bild auf/ab, Leertaste, Pos1/Ende */
@@ -549,6 +555,7 @@
       var line = window.innerHeight * 0.4, active = map[0];
       map.forEach(function (m) { if (m.s.getBoundingClientRect().top <= line) active = m; });
       if (window.innerHeight + ckY() >= ckH() - 2) active = map[map.length - 1];
+      if (window.ckRailLock) map.forEach(function (m) { if (m.s.id === window.ckRailLock) active = m; });
       map.forEach(function (m) {
         var on = m === active;
         m.a.classList.toggle('is-active', on);
@@ -563,6 +570,7 @@
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     ckScroller.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    window.addEventListener('ck-rail', update);
     update();
   })();
 
