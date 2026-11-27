@@ -316,12 +316,9 @@ html[data-accent="verlauf"] .accent-toggle .dot{
 }
 .scroll-hint.is-visible{opacity:.85}
 /* Pfeile stehen still (keine Bewegung). Leuchten sitzt auf dem Rahmen. */
-   So muss der Browser während der Bewegung nichts neu zeichnen, sondern verschiebt die
-   fertige Grafik stufenlos (auch in Bruchteilen eines Pixels). */
 .scroll-hint{filter:drop-shadow(0 0 6px rgba(var(--ext),.5))}
 .scroll-hint .hint-move{display:block;}
 .scroll-hint svg{display:block;width:52px;height:26px}
-/* Gleicher Effekt beim Pfeil der Zurück-Knöpfe – waagerecht, in Pfeilrichtung */
 .back-link .hint-move{display:block;flex-shrink:0;}
 /* Desktop: Pfeile doppelt so groß, doppelter Abstand zur Fußzeile */
 @media (min-width:769px) and (hover:hover) and (pointer:fine){
