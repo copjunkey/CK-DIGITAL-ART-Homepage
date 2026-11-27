@@ -474,31 +474,44 @@
     else setTimeout(function () { hub.classList.add('glow-off'); }, 8700);   // nach dem Ausblenden (6 s + 2,6 s)
   })();
 
-  /* ---------- Orientierungsstrahl auf Unterseiten: aus den Bereichen der Seite erzeugen ----------
-     Erster Bereich = „Start“, danach 02, 03 … (wie auf der Startseite). Nur bei mindestens 2 Bereichen. */
+  /* ---------- Orientierungsstrahl auf Unterseiten ----------
+     Zeigt weiterhin den Hauptpfad der Startseite (Start, 02 … 05). Der Bereich, zu dem die Unterseite gehört,
+     ist markiert; darunter erscheinen – seitlich eingerückt – die Bereiche der geöffneten Unterseite (z. B. 3.1, 3.2). */
   (function () {
     if (document.querySelector('.rail')) return;
+    var MAIN = [['start', 'Start', 'Start'], ['services', '02', 'Services'], ['apps', '03', 'Apps'],
+                ['fotografie', '04', 'Fotografie'], ['kontakt', '05', 'Kontakt']];
+    var page = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+    var parent = /^app\d/.test(page) ? 'apps' : /^leistung-/.test(page) ? 'services' : page === 'galerie' ? 'fotografie' : '';
     var secs = Array.prototype.slice.call(document.querySelectorAll('main > section'));
-    if (secs.length < 2) return;
-    var used = {};
-    var items = secs.map(function (s, i) {
-      var h = s.querySelector('h1, h2');
-      var label = h ? h.textContent.replace(/\s+/g, ' ').trim() : 'Bereich ' + (i + 1);
-      if (!s.id) {
-        var id = 'b-' + label.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-          .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-        while (!id || used[id] || document.getElementById(id)) id += '-' + (i + 1);
-        s.id = id;
-      }
-      used[s.id] = 1;
-      var num = i === 0 ? 'Start' : (i + 1 < 10 ? '0' : '') + (i + 1);
-      return '<li><a href="#' + s.id + '" data-rail="' + s.id + '" aria-label="' + label.replace(/"/g, '&quot;') +
-        '"><span class="num">' + num + '</span><span class="dot" aria-hidden="true"></span></a></li>';
-    });
+    function esc(t) { return t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+    var sub = '';
+    if (parent && secs.length > 1) {
+      var used = {}, pNum = parseInt(MAIN.filter(function (m) { return m[0] === parent; })[0][1], 10);
+      sub = '<ol class="rail-sub">' + secs.map(function (s, i) {
+        var h = s.querySelector('h1, h2');
+        var label = h ? h.textContent.replace(/\s+/g, ' ').trim() : 'Bereich ' + (i + 1);
+        if (!s.id) {
+          var id = 'b-' + label.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+            .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          while (!id || used[id] || document.getElementById(id)) id += '-' + (i + 1);
+          s.id = id;
+        }
+        used[s.id] = 1;
+        return '<li><a href="#' + s.id + '" data-rail="' + s.id + '" aria-label="' + esc(label) +
+          '"><span class="num">' + pNum + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
+      }).join('') + '</ol>';
+    }
+    var html = MAIN.map(function (m) {
+      var isP = m[0] === parent;
+      return '<li' + (isP ? ' class="is-parent"' : '') + '><a href="index.html#' + m[0] + '" aria-label="' + m[2] + '"' +
+        (isP ? ' class="is-parent"' : '') + '><span class="num">' + m[1] + '</span><span class="dot" aria-hidden="true"></span></a>' +
+        (isP ? sub : '') + '</li>';
+    }).join('');
     var nav = document.createElement('nav');
-    nav.className = 'rail';
+    nav.className = 'rail rail-subpage';
     nav.setAttribute('aria-label', 'Bereiche');
-    nav.innerHTML = '<ol>' + items.join('') + '</ol>';
+    nav.innerHTML = '<ol>' + html + '</ol>';
     var foot = document.querySelector('.site-footer');
     if (foot) foot.parentNode.insertBefore(nav, foot); else document.body.appendChild(nav);
   })();

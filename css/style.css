@@ -291,6 +291,17 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   .rail a.is-active .dot{background:var(--accent);border-color:var(--accent);transform:scale(1.25);
     box-shadow:0 0 0 4px rgba(var(--ext),.18),0 0 14px rgba(var(--ext),.9)}
   .rail a.is-active .num{opacity:1;color:var(--ink)}
+  /* Unterseiten: Bereich der Unterseite im Hauptpfad markiert, Unterbereiche seitlich eingerückt */
+  .rail a.is-parent .dot{border-color:var(--accent);box-shadow:0 0 8px rgba(var(--ext),.6)}
+  .rail a.is-parent .num{opacity:1;color:var(--accent)}
+  .rail ol.rail-sub{gap:14px;margin:16px 0 0 22px}
+  .rail ol.rail-sub::before{left:3px;top:4px;bottom:4px;background:rgba(var(--ext),.35)}
+  .rail-sub a{min-height:18px;gap:12px}
+  .rail-sub .dot{width:7px;height:7px;border-width:1.5px}
+  .rail-sub .num{font-size:11px;letter-spacing:.08em}
+  .rail-sub li{position:relative}
+  .rail-sub li:first-child::before{content:"";position:absolute;left:-17px;top:-16px;width:20px;height:25px;
+    border-left:1px solid rgba(var(--ext),.35);border-bottom:1px solid rgba(var(--ext),.35);border-bottom-left-radius:8px;pointer-events:none}
 }
 @media (min-width:1024px) and (hover:hover) and (pointer:fine){
   .rail a:hover .num{opacity:1;color:var(--ink)}
