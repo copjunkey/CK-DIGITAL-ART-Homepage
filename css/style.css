@@ -294,8 +294,14 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   /* Unterseiten: Bereich der Unterseite im Hauptpfad markiert, Unterbereiche seitlich eingerückt */
   .rail a.is-parent .dot{border-color:var(--accent);box-shadow:0 0 8px rgba(var(--ext),.6)}
   .rail a.is-parent .num{opacity:1;color:var(--accent)}
-  .rail ol.rail-sub{gap:14px;margin:16px 0 0 22px}
-  .rail ol.rail-sub::before{left:3px;top:4px;bottom:4px;background:rgba(var(--ext),.35)}
+  .rail ol.rail-sub{gap:14px;margin:0;padding:16px 0 0 22px}
+  .rail ol.rail-sub::before{left:25px;top:20px;bottom:4px;background:rgba(var(--ext),.35)}
+  /* Startseite: Unterseiten nur beim aktiven Bereich sichtbar, gleiten weich auf und zu */
+  .rail ol.rail-sub.collapsible{max-height:0;padding-top:0;opacity:0;overflow:hidden;visibility:hidden;
+    transition:max-height .45s ease,padding-top .45s ease,opacity .35s ease,visibility 0s linear .45s}
+  .rail.measure ol.rail-sub.collapsible{display:none}
+  .rail li.is-open > ol.rail-sub.collapsible{max-height:220px;padding-top:16px;opacity:1;visibility:visible;
+    transition:max-height .45s ease,padding-top .45s ease,opacity .35s ease .1s,visibility 0s}
   .rail-sub a{min-height:18px;gap:12px}
   .rail-sub .dot{width:7px;height:7px;border-width:1.5px}
   .rail-sub .num{font-size:11px;letter-spacing:.08em}

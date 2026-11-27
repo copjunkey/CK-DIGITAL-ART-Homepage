@@ -516,6 +516,40 @@
     if (foot) foot.parentNode.insertBefore(nav, foot); else document.body.appendChild(nav);
   })();
 
+  /* ---------- Orientierungsstrahl Startseite: Unterseiten eines Bereichs ----------
+     Hat ein Bereich Unterseiten, werden sie seitlich eingerückt eingeblendet, sobald der Bereich aktiv ist. */
+  (function () {
+    var rail = document.querySelector('.rail:not(.rail-subpage)');
+    if (!rail) return;
+    var SUBS = {
+      services: [['leistung-apps.html', 'Apps & Software'], ['leistung-web-foto.html', 'Webdesign & Fotografie']],
+      apps: [['app1.html', 'Fokus'], ['app2.html', 'Vorrat'], ['app3.html', 'Wegbegleiter'], ['app4.html', 'Pflanzenpuls']],
+      fotografie: [['galerie.html', 'Galerie']]
+    };
+    Object.keys(SUBS).forEach(function (key) {
+      var a = rail.querySelector('a[data-rail="' + key + '"]');
+      if (!a) return;
+      var n = parseInt(a.querySelector('.num').textContent, 10);
+      var ol = document.createElement('ol');
+      ol.className = 'rail-sub collapsible';
+      ol.innerHTML = SUBS[key].map(function (s, i) {
+        return '<li><a href="' + s[0] + '" aria-label="' + s[1].replace(/&/g, '&amp;') + '" tabindex="-1"><span class="num">' +
+          n + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
+      }).join('');
+      a.parentNode.appendChild(ol);
+    });
+    // Strang nach der zugeklappten Höhe ausrichten: Aufklappen wächst nur nach unten, die Hauptpunkte bleiben stehen
+    function place() {
+      rail.classList.add('measure');
+      var h = rail.offsetHeight;
+      rail.classList.remove('measure');
+      if (h) rail.style.transform = 'translateY(calc(' + (-h / 2) + 'px - var(--footer-h) / 2))';
+    }
+    place();
+    window.addEventListener('resize', place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  })();
+
   /* ---------- Orientierungsstrahl: aktiven Bereich markieren ---------- */
   (function () {
     var links = Array.prototype.slice.call(document.querySelectorAll('.rail a[data-rail]'));
@@ -531,6 +565,11 @@
       map.forEach(function (m) {
         var on = m === active;
         m.a.classList.toggle('is-active', on);
+        var sub = m.a.parentNode.querySelector('.rail-sub.collapsible');
+        if (sub) {
+          m.a.parentNode.classList.toggle('is-open', on);
+          Array.prototype.forEach.call(sub.querySelectorAll('a'), function (x) { x.tabIndex = on ? 0 : -1; });
+        }
         if (on) m.a.setAttribute('aria-current', 'location'); else m.a.removeAttribute('aria-current');
       });
     }
