@@ -355,6 +355,7 @@ html[data-accent="verlauf"] .accent-toggle .dot{
   .scroll-hint svg{width:104px;height:52px}
 }
 @media print{.scroll-hint{display:none}}
+}
 
 /* ---------- Bereiche ---------- */
 section{padding:var(--section) 0}
@@ -418,6 +419,12 @@ html,body{overflow-x:hidden}
 }
 .back-link:focus-visible,.back-link:active{opacity:1}
 .back-link svg{display:block;width:24px;height:24px}
+/* Zurück-Knopf rechts neben den Pfeilen nach unten, mit Abstand, auf gleicher Höhe */
+.back-bar{right:auto;left:calc(50% + 26px + 18px);bottom:calc(var(--footer-h) + 4px)}
+.back-bar .back-link{min-height:40px;padding:0 16px 0 12px}
+@media (min-width:769px) and (hover:hover) and (pointer:fine){
+  .back-bar{left:calc(50% + 52px + 28px);bottom:calc(var(--footer-h) + 22px)}
+  .back-bar .back-link{min-height:48px;padding:0 20px 0 14px}
 @media (hover:hover) and (pointer:fine){
   .back-link:hover{opacity:1;background:var(--accent);color:var(--accent-ink);transform:translateX(-3px)}
 }
