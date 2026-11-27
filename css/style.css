@@ -304,7 +304,7 @@ html[data-accent="verlauf"] .accent-toggle .dot{
     transition:max-height .45s ease,padding-top .45s ease,opacity .35s ease .1s,visibility 0s}
   .rail-sub a{min-height:18px;gap:12px}
   .rail-sub .dot{width:7px;height:7px;border-width:1.5px}
-  .rail-sub .num{font-size:11px;letter-spacing:.08em}
+  .rail-sub .num{font-size:12px;letter-spacing:.04em;white-space:nowrap}
   .rail-sub li{position:relative}
   .rail-sub li:first-child::before{content:"";position:absolute;left:-17px;top:-16px;width:20px;height:25px;
     border-left:1px solid rgba(var(--ext),.35);border-bottom:1px solid rgba(var(--ext),.35);border-bottom-left-radius:8px;pointer-events:none}
@@ -312,6 +312,16 @@ html[data-accent="verlauf"] .accent-toggle .dot{
 @media (min-width:1024px) and (hover:hover) and (pointer:fine){
   .rail a:hover .num{opacity:1;color:var(--ink)}
   .rail a:hover .dot{border-color:var(--accent)}
+}
+/* Namen der Unterseiten auf dunklem Milchglas, damit sie auch über Inhalten lesbar bleiben */
+@media (min-width:1024px){
+  .rail-sub .num{opacity:1;color:var(--sub);padding:3px 9px;margin:-3px 0;border-radius:6px;
+    background:rgba(18,18,24,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.06)}
+  .rail-sub a.is-active .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
+}
+@media (min-width:1024px) and (hover:hover) and (pointer:fine){
+  .rail-sub a:hover .num{color:var(--ink);border-color:rgba(var(--ext),.45)}
 }
 @media print{.rail{display:none!important}}
 

@@ -478,14 +478,14 @@
   var RAIL_SUBS = {
     services: [['leistung-apps.html', 'Apps & Software'], ['leistung-web-foto.html', 'Webdesign & Fotografie']],
     apps: [['app1.html', 'Fokus'], ['app2.html', 'Vorrat'], ['app3.html', 'Wegbegleiter'], ['app4.html', 'Pflanzenpuls']],
-    fotografie: [['galerie.html', 'Galerie']]
+    fotografie: [['galerie.html', 'Fotografie']]
   };
   function railSubList(key, n, current, collapsible) {
     return '<ol class="rail-sub' + (collapsible ? ' collapsible' : '') + '">' + RAIL_SUBS[key].map(function (s, i) {
       var cur = s[0] === current;
       return '<li><a href="' + s[0] + '" aria-label="' + s[1].replace(/&/g, '&amp;') + '"' +
         (cur ? ' class="is-active" aria-current="page"' : '') + (collapsible ? ' tabindex="-1"' : '') +
-        '><span class="num">' + n + '.' + (i + 1) + '</span><span class="dot" aria-hidden="true"></span></a></li>';
+        '><span class="num">' + s[1].replace(/&/g, '&amp;') + '</span><span class="dot" aria-hidden="true"></span></a></li>';
     }).join('') + '</ol>';
   }
 
